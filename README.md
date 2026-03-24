@@ -7,6 +7,7 @@
 > are placeholders to demonstrate the infinite TPS architecture concept.
 
 **Created by Laura Wolf (Brixa420)** - 2026
+**Written by Elara AI**
 
 A lightweight layered blockchain for gaming economies with **infinite TPS scaling**.
 

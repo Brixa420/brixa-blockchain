@@ -7,7 +7,8 @@
 > **Note:** This is NOT a real, functioning blockchain. All values ( TPS, tokenomics, 
 > consensus parameters) are placeholders to demonstrate the infinite TPS architecture concept.
 
-**Author: Laura Wolf (Brixa420)** - March 2026
+**Author: Laura Wolf (Brixa420)**
+**Written by Elara AI** - March 2026
 
 ## A Lightweight Layered Blockchain for Gaming Economies
 
