@@ -1,14 +1,18 @@
-# Brixa - Simple Scaling Layer
+# Brixa Scaling Layer
 
-**Add infinite TPS to any blockchain in 2 minutes.**
+⚠️ **Warning: This is experimental and untested code. Do not use for production. Use at your own risk.**
+
+**Note: This is NOT a real blockchain. All values (TPS, tokenomics, etc.) are placeholders to demonstrate the infinite TPS architecture concept.**
+
+---
+
+A drop-in horizontal scaling layer that supplements any blockchain with infinite TPS.
 
 ---
 
 ## Easiest Way (One File)
 
-### Step 1: Save This File
-
-Save as `brixa.html`:
+### Step 1: Save brixa.html
 
 ```html
 <!DOCTYPE html>
@@ -56,27 +60,19 @@ async function start(){
 </body></html>
 ```
 
-### Step 2: Open in Browser
+### Step 2: Open in Browser → Enter RPC → Click Start
 
-Double-click `brixa.html`
+### Step 3: Point Wallet to `http://localhost:8545`
 
-### Step 3: Enter Your RPC & Click Start
-
-That's it! Your wallet now connects through Brixa's scaling layer.
+Done!
 
 ---
 
 ## CLI Way
 
 ```bash
-# Install
 npm install -g brixa-scaler
-
-# Run proxy
 brixa-scaler proxy --chain ethereum --rpc https://your-rpc-url
-
-# Your wallet now uses Brixa!
-# RPC: http://localhost:8545
 ```
 
 ---
@@ -111,8 +107,5 @@ scaler.submit({'to': '0x...', 'amount': 1})
 
 ---
 
-**That's it!** 
-
-For docs: https://github.com/Brixa420/brixa-blockchain
-
-**Brixa** - Infinite TPS for everyone 🧸💖
+**Created by Laura Wolf (Brixa420) - 2026**  
+**Written by Elara AI** 🧸💖
