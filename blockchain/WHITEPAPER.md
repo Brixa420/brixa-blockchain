@@ -1,7 +1,11 @@
 # Wrath of Cali Blockchain - Whitepaper
 
 > ⚠️ **Warning: This is experimental and untested code.**
-> Do not use for production or with real funds. The concepts are sound but the implementation has not been audited or tested.
+> Do not use for production or with real funds. The concepts are sound but 
+> the implementation has not been audited or tested.
+>
+> **Note:** This is NOT a real, functioning blockchain. All values ( TPS, tokenomics, 
+> consensus parameters) are placeholders to demonstrate the infinite TPS architecture concept.
 
 **Author: Laura Wolf (Brixa420)** - March 2026
 

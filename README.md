@@ -2,6 +2,9 @@
 
 > ⚠️ **Warning: This is experimental and untested code.** 
 > Do not use for production or with real funds. Use at your own risk.
+> 
+> **Note:** This is NOT a real, functioning blockchain. All values ( TPS, tokenomics, etc.) 
+> are placeholders to demonstrate the infinite TPS architecture concept.
 
 **Created by Laura Wolf (Brixa420)** - 2026
 
