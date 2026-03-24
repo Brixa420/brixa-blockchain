@@ -45,19 +45,49 @@ await scaler.submitTransaction({ from: '0x...', to: '0x...', amount: '1' });
 
 ## 📦 Installation
 
-### Python
+### Python (PyPI)
 ```bash
 pip install wrath-scaling-layer
+
+# Or with specific chain support:
+pip install wrath-scaling-layer[ethereum]
+pip install wrath-scaling-layer[bitcoin]
+pip install wrath-scaling-layer[solana]
 ```
 
-### Node.js
+```python
+from wrath_scaling import WrathScaler, BitcoinHandler, EthereumHandler
+
+# Bitcoin
+scaler = WrathScaler('bitcoin', handler=BitcoinHandler(rpc_url='http://localhost:8332'))
+
+# Ethereum
+scaler = WrathScaler('ethereum', handler=EthereumHandler(web3_provider='https://...'))
+
+# Polygon, BSC, Avalanche also supported!
+scaler = WrathScaler('polygon', handler=PolygonHandler())
+
+await scaler.start()
+await scaler.submit({'to': 'address', 'amount': 0.001})
+```
+
+### Node.js / JavaScript (NPM)
 ```bash
 npm install @wrathofcali/scaling-layer
 ```
 
+```javascript
+import { WrathScaler, BitcoinHandler, EthereumHandler } from '@wrathofcali/scaling-layer';
+
+const scaler = new WrathScaler('bitcoin', { shards: 100 });
+scaler.setHandler(new BitcoinHandler());
+await scaler.start();
+await scaler.submit({ to: 'bc1q...', amount: 0.001 });
+```
+
 ### Browser (CDN)
 ```html
-<script src="https://unpkg.com/wrath-scaler/dist/wrath-scaler.js"></script>
+<script src="https://unpkg.com/@wrathofcali/scaling-layer/dist/wrath-scaler.min.js"></script>
 ```
 
 ---

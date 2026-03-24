@@ -1,0 +1,30 @@
+{
+  "name": "@wrathofcali/scaling-layer",
+  "version": "1.0.0",
+  "description": "Drop-in infinite TPS scaling layer for any blockchain",
+  "main": "dist/wrath-scaler.min.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "terser wrath-scaler.js -o dist/wrath-scaler.min.js --compress --mangle",
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Brixa420/brixa-blockchain"
+  },
+  "keywords": [
+    "blockchain",
+    "scaling",
+    "tps",
+    "ethereum",
+    "bitcoin",
+    "sharding",
+    "infinite"
+  ],
+  "author": "Laura Wolf (Brixa420)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Brixa420/brixa-blockchain/issues"
+  },
+  "homepage": "https://github.com/Brixa420/brixa-blockchain#readme"
+}
