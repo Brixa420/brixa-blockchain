@@ -18,7 +18,7 @@ A **drop-in horizontal scaling layer** that supplements any blockchain with infi
 ## Features
 
 - ⚡ **1-second block times** - Fast block production per shard
-- 🚀 **Infinite TPS Scaling** - Horizontal sharding for unlimited throughput
+- 🚀 **Infinite TPS Scaling** - Horizontal sharding for unlimited throughput (scales with infrastructure)
 - 🔒 **Proof of Stake** - Secure validator consensus
 - 💰 **Native Token (CAL)** - Demonstrates economics (optional)
 - 🎮 **Gaming-Optimized** - Designed for game economies

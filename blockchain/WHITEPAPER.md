@@ -1049,6 +1049,8 @@ Our Architecture:     TPS = N × C (where N = number of shards)
 
 The stress test proves: more shards = more throughput (we saw 4.3x from 1→100 shards). That trend continues forever.
 
+---
+
 We ran actual benchmarks on consumer hardware (Apple M2) to prove the architecture:
 
 ```
