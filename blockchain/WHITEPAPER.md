@@ -284,11 +284,12 @@ python wallet.py send <to_address> <amount>
 - [ ] Slashing logic
 - [ ] Reward distribution
 
-### Phase 3: Scale (Planned)
-- [ ] Sharded nodes
-- [ ] Super nodes
-- [ ] ZK proofs
-- [ ] Cross-chain bridges
+### Phase 3: Scale (In Progress)
+- [x] Sharded nodes (super_node.go)
+- [x] Shard routing (go_router.go)
+- [x] Auto-scaling (auto_scaler.go)
+- [ ] Cross-shard transactions
+- [ ] ZK rollups
 
 ### Phase 4: Governance (Planned)
 - [ ] DAO structure
@@ -298,7 +299,50 @@ python wallet.py send <to_address> <amount>
 
 ---
 
-## 10. Conclusion
+## 10. Infinite Scaling Architecture
+
+### 10.1 The Sharding Solution
+
+As more validators join, transaction volume splits across them. **More nodes = more TPS.**
+
+```
+                         ┌─────────────────────────────────────┐
+                         │         Shard Router                │
+                         │  (Routes to main nodes by address)  │
+                         └─────────────────────────────────────┘
+           ┌─────────────────┼─────────────────┼─────────────────┐
+           ▼                 ▼                 ▼                 ▼
+    ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+    │ Main Node 0 │   │ Main Node 1 │   │ Main Node 2 │   │ Main Node N │
+    │ (Shard A)   │   │ (Shard B)   │   │ (Shard C)   │   │ (Shard ...) │
+    └─────────────┘   └─────────────┘   └─────────────┘   └─────────────┘
+```
+
+### 10.2 Scaling Parameters
+
+```python
+MAX_VALIDATORS_PER_SHARD = 1000     # Max validators per main node
+MAX_BATCHES_PER_BLOCK = 100         # Batches per block
+MAX_TRANSACTIONS_PER_BATCH = 1000  # Transactions per batch
+BLOCK_TIME = 1                      # 1 second
+
+# Theoretical max per shard:
+# 1,000 validators × 1 batch/sec × 1,000 txs = 1M TPS/shard
+# With 100 shards: 100M+ TPS (infinite scaling!)
+```
+
+### 10.3 Sharding Components
+
+| Component | Purpose |
+|-----------|---------|
+| **Shard Router** | Routes transactions to correct main node by address |
+| **Super Node** | Manages multiple shards, handles cross-shard TX |
+| **ZK Node** | Zero-knowledge proofs for sharding |
+| **Auto Scaler** | Adds/removes shards based on load |
+
+---
+
+## 11. Conclusion
 
 Wrath of Cali's layered blockchain provides a practical solution for gaming economies:
 
