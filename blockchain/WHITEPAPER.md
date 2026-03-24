@@ -1,5 +1,8 @@
 # Wrath of Cali Blockchain - Whitepaper
 
+> ⚠️ **Warning: This is experimental and untested code.**
+> Do not use for production or with real funds. The concepts are sound but the implementation has not been audited or tested.
+
 ## A Lightweight Layered Blockchain for Gaming Economies
 
 ### Abstract
