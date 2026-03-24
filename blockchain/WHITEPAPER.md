@@ -1004,7 +1004,74 @@ curl http://localhost:8000/status
 | 100 shards, 1000 validators | 1,000,000,000 | <200ms | Production |
 | 1000 shards, 10000 validators | 100,000,000,000 | <500ms | Enterprise |
 
-### 10.8 Why "Infinite"?
+### 10.7 Why "Infinite"?
+
+The term "infinite" refers to the **scalability model**, not an actual infinite number:
+
+**The Core Formula:**
+```
+Total TPS = TPS_Per_Shard × Number_Of_Shards
+```
+
+**Why It Scales Infinitely:**
+
+1. **Shards are Independent** - Each shard runs on its own hardware. Adding shard 101 doesn't slow down shard 1-100.
+
+2. **No Shared Bottleneck** - Traditional blockchains have a single mempool. Our architecture has independent mempools per shard group.
+
+3. **Horizontal Scaling** - We add capacity by adding MORE validators, not faster machines.
+
+4. **The Math:**
+   ```
+   1 shard  = 1B TPS
+   100 shards = 100B TPS  
+   1000 shards = 1T TPS
+   ...and so on...
+   ```
+
+**Comparison:**
+```
+Bitcoin/Ethereum:     TPS = C (constant, capped)
+Our Architecture:     TPS = N × C (scales with validators)
+                      As N → ∞, TPS → ∞
+   ```
+
+### 10.8 How Do Shards Actually Happen?
+
+**The key insight: Shards aren't "created" - they emerge.**
+
+Think of it like a highway:
+- Lane 1, Lane 2, Lane 3 aren't built - they're just the road markings
+- Cars (transactions) split across lanes (shards) automatically
+
+**In our architecture:**
+
+1. **Validator joins** → Gets a Soul-Bound NFT as identity
+2. **Validator runs** → The network assigns them to a "shard group" based on their ID
+3. **Shard = all validators** handling addresses in a certain range (e.g., 0x0000-00FF)
+4. **No shard creation ceremony** - it's automatic, emergent organization
+
+**Example:**
+```
+Validator 101 joins → Network says: "You're on Shard 1"
+Validator 102 joins → Network says: "You're on Shard 1"  
+Validator 201 joins → Network says: "You're on Shard 2"
+
+Now Shard 1 has 2 validators, Shard 2 has 1.
+More validators on a shard = more TPS for those addresses.
+```
+
+**The Soul-Bound NFT Model:**
+- 1 wallet = 1 validator identity (NFT)
+- Stake more = get more validator NFTs = run more instances
+- More instances = more voting power, more TPS contribution
+- Anyone can spin up as many as they please (limited by stake)
+
+**Where do shards come from?**
+They don't "come from" anywhere. 
+The shard router just maps addresses to validator groups.
+The group = the shard.
+That's it!
 
 The term "infinite" refers to the **scalability model**, not an actual infinite number. Here's why:
 
@@ -1098,7 +1165,7 @@ We ran actual benchmarks on consumer hardware (Apple M2) to prove the architectu
 - ✅ Scaling is near-linear (4.3x speedup with 100 shards)
 - ✅ Architecture proven on real hardware
 
-### 10.7 Troubleshooting
+### 10.9 Troubleshooting
 
 **Problem**: Transactions not reaching correct shard
 - Check: Shard router is running and reachable
@@ -1132,7 +1199,7 @@ The native Calicos token powers an entire ecosystem of in-game items, staking re
 
 ---
 
-## Appendix A: File Structure
+## 12. Appendix A: File Structure
 
 ```
 blockchain/
@@ -1163,7 +1230,7 @@ blockchain/
 
 ---
 
-## Appendix B: Glossary
+## 13. Appendix B: Glossary
 
 | Term | Definition |
 |------|------------|
