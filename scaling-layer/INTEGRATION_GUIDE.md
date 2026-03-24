@@ -1,6 +1,8 @@
-# Brixa Integration Guide
+# Brixa - VPN for TPS
 
-**Add infinite TPS to any blockchain - in 2 minutes.**
+**Add infinite TPS to any blockchain - like a VPN for transactions.**
+
+⚠️ **Warning: This is experimental and untested code. Do not use for production.**
 
 ---
 

@@ -1,46 +1,44 @@
-# Brixa Scaling Layer
+# Brixa - VPN for TPS
 
 ⚠️ **Warning: This is experimental and untested code. Do not use for production. Use at your own risk.**
 
-**Note: This is NOT a blockchain. This is a scaling LAYER that sits on top of existing blockchains to add infinite TPS.**
+**Brixa is NOT a blockchain. It's a VPN for TPS - you run it on your end, and your blockchain suddenly has infinite transactions per second.**
 
 ---
 
-## What Is This?
+## What's a VPN for TPS?
 
-**Brixa is NOT a blockchain.** It's a scaling layer that adds infinite TPS to ANY existing blockchain.
+Just like a VPN hides your location, **Brixa hides your transactions** - batching them together so you can send way more than the chain normally allows.
 
-You keep using:
-- Ethereum → Brixa adds sharding for more TPS
-- Bitcoin → Brixa adds sharding for more TPS
-- Solana → Brixa adds sharding for more TPS
-- Whatever chain → Brixa makes it faster
+```
+Normal:     Wallet → Chain (limited by chain TPS)
 
-You run this alongside your existing node. It batches and shards transactions, then sends them to your normal blockchain.
+With Brixa: Wallet → Brixa → Chain (unlimited!)
+```
+
+**The chain doesn't know Brixa exists.**
 
 ## How It Works
 
 ```
-┌─────────────────────────────────────────┐
-│           YOUR WALLET                  │
-└─────────────────┬───────────────────────┘
-                  │ (connects to Brixa)
-                  ▼
-┌─────────────────────────────────────────┐
-│              BRIXA                     │
-│    (scaling layer - this project)      │
-│   Batches & shards transactions       │
-└─────────────────┬───────────────────────┘
-                  │ (sends batched txs)
-                  ▼
-┌─────────────────────────────────────────┐
-│      YOUR EXISTING BLOCKCHAIN          │
-│   (Ethereum, Bitcoin, Solana, etc.)   │
-│              unchanged                 │
-└─────────────────────────────────────────┘
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│   WALLET    │────▶│    BRIXA     │────▶│   CHAIN      │
+│  (You)      │     │ (VPN for TPS)│     │ (Ethereum,   │
+│              │     │              │     │  Bitcoin,    │
+│              │     │ Batches &    │     │  Solana...)  │
+│              │     │ shards txs   │     │              │
+└──────────────┘     └──────────────┘     └──────────────┘
+                           │
+                    ┌──────┴──────┐
+                    │ No chain   │
+                    │ needs to   │
+                    │ know...    │
+                    └────────────┘
 ```
 
-You keep using your normal blockchain. Brixa just sits in front and makes it faster.
+Your wallet doesn't connect directly to the chain anymore. It connects to Brixa.
+
+**Chain has no idea you're using Brixa.**
 
 ### Step 1: Save brixa.html
 
