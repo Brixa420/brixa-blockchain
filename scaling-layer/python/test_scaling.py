@@ -1,15 +1,15 @@
 """
-Test script for WrathScaler Python package
+Test script for BrixaScaler Python package
 """
 
 import asyncio
-from wrath_scaling import WrathScaler, BitcoinHandler, EthereumHandler
+from brixa_scaling import BrixaScaler, BitcoinHandler, EthereumHandler
 
 
 async def test_bitcoin():
     """Test Bitcoin handler"""
     handler = BitcoinHandler(rpc_url="http://localhost:8332")
-    scaler = WrathScaler('bitcoin', handler=handler)
+    scaler = BrixaScaler('bitcoin', handler=handler)
     
     await scaler.start()
     
@@ -29,7 +29,7 @@ async def test_bitcoin():
 async def test_ethereum():
     """Test Ethereum handler"""
     handler = EthereumHandler(web3_provider="https://eth-mainnet.alchemyapi.io/")
-    scaler = WrathScaler('ethereum', handler=handler)
+    scaler = BrixaScaler('ethereum', handler=handler)
     
     await scaler.start()
     
@@ -47,7 +47,7 @@ async def test_ethereum():
 
 
 async def main():
-    print("Testing WrathScaler...")
+    print("Testing BrixaScaler...")
     
     print("\n--- Bitcoin ---")
     await test_bitcoin()

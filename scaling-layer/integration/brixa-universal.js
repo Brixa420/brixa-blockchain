@@ -1,16 +1,16 @@
 /**
- * WrathScaler - Universal Drop-In Scaling Layer
+ * BrixaScaler - Universal Drop-In Scaling Layer
  * Works with ANY blockchain: Bitcoin, Ethereum, Solana, etc.
  * 
  * USAGE:
- *   import { WrathScaler } from './wrath-scaler.js'
+ *   import { BrixaScaler } from './wrath-scaler.js'
  *   
- *   const scaler = new WrathScaler('bitcoin', { shards: 100 })
+ *   const scaler = new BrixaScaler('bitcoin', { shards: 100 })
  *   await scaler.start()
  *   await scaler.submit({ to: '1ABC...', amount: 0.001 })
  */
 
-class WrathScaler {
+class BrixaScaler {
   /**
    * Create a scaling layer for any blockchain
    * @param {string} chain - Chain name: 'bitcoin', 'ethereum', 'solana', 'litecoin'
@@ -31,7 +31,7 @@ class WrathScaler {
     this.stats = { processed: 0, failed: 0 };
     this.handlers = {};
     
-    console.log(`🚀 WrathScaler initialized: ${this.shards} shards for ${this.chain}`);
+    console.log(`🚀 BrixaScaler initialized: ${this.shards} shards for ${this.chain}`);
   }
   
   /**
@@ -264,13 +264,13 @@ const SolanaHandler = {
 
 // ========== EXPORTS ==========
 
-export { WrathScaler, BitcoinHandler, EthereumHandler, SolanaHandler };
-export default WrathScaler;
+export { BrixaScaler, BitcoinHandler, EthereumHandler, SolanaHandler };
+export default BrixaScaler;
 
 // ========== QUICK START ==========
 /*
 // BITCOIN EXAMPLE:
-const btcScaler = new WrathScaler('bitcoin', { shards: 100 });
+const btcScaler = new BrixaScaler('bitcoin', { shards: 100 });
 btcScaler.setHandler(BitcoinHandler);
 await btcScaler.start();
 
@@ -283,7 +283,7 @@ await btcScaler.submit({
 
 
 // ETHEREUM EXAMPLE:
-const ethScaler = new WrathScaler('ethereum', { shards: 100 });
+const ethScaler = new BrixaScaler('ethereum', { shards: 100 });
 ethScaler.setHandler(EthereumHandler);
 await ethScaler.start();
 
@@ -295,7 +295,7 @@ await ethScaler.submit({
 
 
 // SOLANA EXAMPLE:
-const solScaler = new WrathScaler('solana', { shards: 50 });
+const solScaler = new BrixaScaler('solana', { shards: 50 });
 solScaler.setHandler(SolanaHandler);
 await solScaler.start();
 

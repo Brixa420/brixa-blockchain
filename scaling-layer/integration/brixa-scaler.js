@@ -3,7 +3,7 @@
 
 (function() {
   // ========== THE DROP-IN CLASS ==========
-  class WrathScaler {
+  class BrixaScaler {
     constructor(blockchainUrl, options = {}) {
       this.url = blockchainUrl;
       this.shards = options.shards || 100;
@@ -19,7 +19,7 @@
     }
     
     // ====== THE 3-LINE SETUP ======
-    // new WrathScaler('https://eth-mainnet...', { shards: 100 })
+    // new BrixaScaler('https://eth-mainnet...', { shards: 100 })
     // .then(scaler => scaler.start())
     // ================================
     
@@ -106,12 +106,12 @@
   }
   
   // Export for use
-  window.WrathScaler = WrathScaler;
+  window.BrixaScaler = BrixaScaler;
   
   // ========== QUICK START EXAMPLES ==========
   /*
   // Example 1: Ethereum
-  const ethScaler = new WrathScaler('https://eth-mainnet.alchemyapi.io/...', {
+  const ethScaler = new BrixaScaler('https://eth-mainnet.alchemyapi.io/...', {
     shards: 100
   });
   
@@ -128,7 +128,7 @@
   
   
   // Example 2: Solana
-  const solScaler = new WrathScaler('https://api.mainnet-beta.solana.com', {
+  const solScaler = new BrixaScaler('https://api.mainnet-beta.solana.com', {
     shards: 50
   });
   
@@ -140,6 +140,6 @@
   };
   */
   
-  console.log('💜 WrathScaler loaded! Create with: new WrathScaler(blockchainUrl, options)');
+  console.log('💜 BrixaScaler loaded! Create with: new BrixaScaler(blockchainUrl, options)');
   
 })();

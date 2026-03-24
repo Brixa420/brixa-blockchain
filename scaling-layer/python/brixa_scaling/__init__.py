@@ -1,30 +1,30 @@
 """
-WrathScaler - Drop-in Infinite TPS Scaling Layer
+BrixaScaler - Drop-in Infinite TPS Scaling Layer
 
 Supports: Bitcoin, Ethereum, Solana, Polygon, BSC, Avalanche, and any blockchain
 
 INSTALL:
-    pip install wrath-scaling-layer
+    pip install brixa-scaling-layer
 
 QUICK START:
-    from wrath_scaling import WrathScaler, BitcoinHandler, EthereumHandler
+    from brixa_scaling import BrixaScaler, BitcoinHandler, EthereumHandler
     
     # Bitcoin
-    scaler = WrathScaler('bitcoin', handler=BitcoinHandler())
+    scaler = BrixaScaler('bitcoin', handler=BitcoinHandler())
     
     # Ethereum
-    scaler = WrathScaler('ethereum', handler=EthereumHandler(web3_provider="https://..."))
+    scaler = BrixaScaler('ethereum', handler=EthereumHandler(web3_provider="https://..."))
     
     await scaler.start()
     await scaler.submit({'to': 'address', 'amount': 0.001})
 """
 
-from .scaling import WrathScaler, ScalingConfig, ChainHandler
+from .scaling import BrixaScaler, ScalingConfig, ChainHandler
 from .handlers import BitcoinHandler, EthereumHandler, SolanaHandler, PolygonHandler, BSCHandler
 
 __version__ = "1.0.0"
 __all__ = [
-    'WrathScaler',
+    'BrixaScaler',
     'ScalingConfig', 
     'ChainHandler',
     'BitcoinHandler',

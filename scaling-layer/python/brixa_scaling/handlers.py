@@ -1,5 +1,5 @@
 """
-Chain Handlers for WrathScaler
+Chain Handlers for BrixaScaler
 Each handler implements blockchain-specific submission logic
 """
 

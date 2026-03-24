@@ -156,7 +156,7 @@
         <div class="step-num">2</div>
         <div class="step-content">
           <h3>Initialize (3 Lines)</h3>
-          <code>const scaler = new WrathScaler('https://your-rpc-url');
+          <code>const scaler = new BrixaScaler('https://your-rpc-url');
 await scaler.start();
 // That's it!</code>
         </div>
@@ -203,11 +203,11 @@ scaler.send_transaction({"to": "0xABC...", "value": 1000000})</code>
 
   <script>
     // ========== WRATH SCALER - MINIFIED DROP-IN ==========
-    !function(){class t{constructor(t,e={}){this.url=t,this.shards=e.shards||100,this.queue={},this.stats={processed:0,failed:0};for(let t=0;t<this.shards;t++)this.queue[t]=[];console.log(`🚀 WrathScaler: ${this.shards} shards`)}async start(){this.interval=setInterval((()=>this.processBatch()),100),console.log("⚡ Scaling layer ACTIVE")}stop(){clearInterval(this.interval)}async submit(t){const e=this.getShardForAddress(t.to);return this.queue[e].push({...t,_shard:e,_timestamp:Date.now()}),`queued_shard_${e}`}async submitBatch(t){return Promise.all(t.map((t=>this.submit(t))))}getShardForAddress(t){let e=0;for(let s=0;s<t.length;s++)e=((e<<5)-e)+t.charCodeAt(s),e&=e;return Math.abs(e)%this.shards}async processBatch(){for(let t=0;t<this.shards;t++){const e=this.queue[t].splice(0,1e3);if(e.length>0)try{await this.submitToChain(e),this.stats.processed+=e.length}catch(t){this.stats.failed+=e.length,this.queue[t].unshift(...e)}}}async submitToChain(t){console.log(`📦 Batch: ${t.length} txs`)}getStats(){const e=Object.values(this.queue).reduce(((t,e)=>t+e.length),0);return{shards:this.shards,queued:e,processed:this.stats.processed,failed:this.stats.failed}}}window.WrathScaler=t}();
+    !function(){class t{constructor(t,e={}){this.url=t,this.shards=e.shards||100,this.queue={},this.stats={processed:0,failed:0};for(let t=0;t<this.shards;t++)this.queue[t]=[];console.log(`🚀 BrixaScaler: ${this.shards} shards`)}async start(){this.interval=setInterval((()=>this.processBatch()),100),console.log("⚡ Scaling layer ACTIVE")}stop(){clearInterval(this.interval)}async submit(t){const e=this.getShardForAddress(t.to);return this.queue[e].push({...t,_shard:e,_timestamp:Date.now()}),`queued_shard_${e}`}async submitBatch(t){return Promise.all(t.map((t=>this.submit(t))))}getShardForAddress(t){let e=0;for(let s=0;s<t.length;s++)e=((e<<5)-e)+t.charCodeAt(s),e&=e;return Math.abs(e)%this.shards}async processBatch(){for(let t=0;t<this.shards;t++){const e=this.queue[t].splice(0,1e3);if(e.length>0)try{await this.submitToChain(e),this.stats.processed+=e.length}catch(t){this.stats.failed+=e.length,this.queue[t].unshift(...e)}}}async submitToChain(t){console.log(`📦 Batch: ${t.length} txs`)}getStats(){const e=Object.values(this.queue).reduce(((t,e)=>t+e.length),0);return{shards:this.shards,queued:e,processed:this.stats.processed,failed:this.stats.failed}}}window.BrixaScaler=t}();
     // ======================================================
     
     // Demo instance
-    const demoScaler = new WrathScaler('demo');
+    const demoScaler = new BrixaScaler('demo');
     demoScaler.start();
     
     // Live demo functions
@@ -250,7 +250,7 @@ scaler.send_transaction({"to": "0xABC...", "value": 1000000})</code>
     // Shard count display
     document.getElementById('shardCount').textContent = demoScaler.shards;
     
-    log('💜 WrathScaler loaded! Try submitting a transaction above.');
+    log('💜 BrixaScaler loaded! Try submitting a transaction above.');
   </script>
 </body>
 </html>

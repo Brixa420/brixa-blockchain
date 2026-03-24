@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="wrath-scaling-layer",
+    name="brixa-scaling-layer",
     version="1.0.0",
     author="Laura Wolf (Brixa420)",
     author_email="brixa420@example.com",
@@ -36,6 +36,6 @@ setup(
         "solana": ["solana>=0.30.0"],
     },
     package_data={
-        "wrath_scaling": ["py.typed"],
+        "brixa_scaling": ["py.typed"],
     },
 )

@@ -1,5 +1,5 @@
 """
-WrathScaler - Core Scaling Layer Implementation
+BrixaScaler - Core Scaling Layer Implementation
 """
 
 import asyncio
@@ -38,7 +38,7 @@ class Transaction:
     _chain: str = ""
 
 
-class WrathScaler:
+class BrixaScaler:
     """
     Drop-in infinite TPS scaling layer for any blockchain.
     
@@ -53,9 +53,9 @@ class WrathScaler:
         - Any other chain
     
     QUICK START:
-        from wrath_scaling import WrathScaler, EthereumHandler
+        from brixa_scaling import BrixaScaler, EthereumHandler
         
-        scaler = WrathScaler('ethereum', handler=EthereumHandler(rpc_url))
+        scaler = BrixaScaler('ethereum', handler=EthereumHandler(rpc_url))
         await scaler.start()
         await scaler.submit({'to': '0x...', 'amount': 1})
     """
@@ -87,7 +87,7 @@ class WrathScaler:
         self.stats = {"processed": 0, "failed": 0}
         self._task: Optional[asyncio.Task] = None
         
-        logger.info(f"🚀 WrathScaler initialized: {self.config.shards} shards for {self.chain}")
+        logger.info(f"🚀 BrixaScaler initialized: {self.config.shards} shards for {self.chain}")
     
     async def start(self) -> None:
         """Start the scaling layer"""

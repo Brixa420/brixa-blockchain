@@ -1,11 +1,11 @@
 {
-  "name": "@wrathofcali/scaling-layer",
+  "name": "@brixa420/scaling-layer",
   "version": "1.0.0",
   "description": "Drop-in infinite TPS scaling layer for any blockchain",
-  "main": "dist/wrath-scaler.min.js",
+  "main": "dist/brixa-scaler.min.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "terser wrath-scaler.js -o dist/wrath-scaler.min.js --compress --mangle",
+    "build": "terser brixa-scaler.js -o dist/brixa-scaler.min.js --compress --mangle",
     "test": "node test.js"
   },
   "repository": {
