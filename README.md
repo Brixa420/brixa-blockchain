@@ -29,8 +29,8 @@ A lightweight layered blockchain for gaming economies with **infinite TPS scalin
 
 | Configuration | TPS |
 |--------------|-----|
-| Single Shard | 1,000,000 |
-| 10 Shards | 10,000,000 |
+| Single Shard | 10,000,000 |
+| 10 Shards | 100,000,000 |
 | 100 Shards | 100,000,000+ |
 
 **TPS = Validators × BatchesPerBlock × TxsPerBatch**

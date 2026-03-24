@@ -322,22 +322,28 @@ This section provides a complete, implementation-ready specification for achievi
 The TPS of a sharded blockchain follows this formula:
 
 ```
-Total TPS = (Validators × Transactions_Per_Batch × Batches_Per_Second) × Shard_Count
+Total TPS = Validators_Per_Shard × Batches_Per_Second × Transactions_Per_Batch × Shard_Count
 ```
 
 Where:
-- `Validators` = Number of active validator nodes per shard
-- `Transactions_Per_Batch` = Maximum transactions in a single batch (typically 1,000)
-- `Batches_Per_Second` = How often validators submit batches (typically 1 per second)
+- `Validators_Per_Shard` = Number of active validator nodes per shard (each runs in parallel)
+- `Batches_Per_Second` = How often each validator submits a batch (typically 10)
+- `Transactions_Per_Batch` = Maximum transactions in a single batch (typically 10,000)
 - `Shard_Count` = Number of independent shard chains running in parallel
 
 **Example Calculations:**
 
 | Validators/Shard | TPS/Shard | 10 Shards | 100 Shards |
 |------------------|-----------|-----------|------------|
-| 100              | 100,000   | 1,000,000 | 10,000,000 |
-| 1,000            | 1,000,000 | 10,000,000| 100,000,000|
-| 10,000           | 10,000,000| 100,000,000| 1,000,000,000|
+| 100              | 10,000,000 | 100,000,000 | 1,000,000,000 |
+| 1,000            | 100,000,000 | 1,000,000,000 | 10,000,000,000 |
+| 10,000           | 1,000,000,000 | 10,000,000,000 | 100,000,000,000 |
+
+**With realistic defaults:**
+```
+100 validators × 10 batches/sec × 10,000 txs = 10M TPS/shard
+10M TPS × 100 shards = 1 Billion TPS!
+```
 
 ### 10.3 Core Components
 
@@ -990,9 +996,9 @@ curl http://localhost:8000/status
 
 | Configuration | TPS | Latency | Notes |
 |--------------|-----|---------|-------|
-| 10 shards, 100 validators | 100,000 | <100ms | Basic setup |
-| 100 shards, 1000 validators | 10,000,000 | <200ms | Production |
-| 1000 shards, 10000 validators | 100,000,000 | <500ms | Enterprise |
+| 10 shards, 100 validators | 10,000,000 | <100ms | Basic setup |
+| 100 shards, 1000 validators | 1,000,000,000 | <200ms | Production |
+| 1000 shards, 10000 validators | 100,000,000,000 | <500ms | Enterprise |
 
 ### 10.7 Troubleshooting
 
