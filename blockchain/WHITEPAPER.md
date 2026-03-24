@@ -299,46 +299,101 @@ python wallet.py send <to_address> <amount>
 
 ---
 
-## 10. Infinite Scaling Architecture
+## 10. Infinite TPS Architecture
 
-### 10.1 The Sharding Solution
+### 10.1 The Problem with Traditional Blockchains
 
-As more validators join, transaction volume splits across them. **More nodes = more TPS.**
+Single-chain blockchains are fundamentally limited:
+- Every node processes every transaction
+- Bottleneck at block size and block time
+- More validators = slower consensus
+
+### 10.2 Our Solution: Horizontal Sharding
+
+We solve this by **horizontal sharding** - split the workload across multiple independent chains.
 
 ```
-                         ┌─────────────────────────────────────┐
-                         │         Shard Router                │
-                         │  (Routes to main nodes by address)  │
-                         └─────────────────────────────────────┘
-           ┌─────────────────┼─────────────────┼─────────────────┐
-           ▼                 ▼                 ▼                 ▼
-    ┌─────────────┐   ┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-    │ Main Node 0 │   │ Main Node 1 │   │ Main Node 2 │   │ Main Node N │
-    │ (Shard A)   │   │ (Shard B)   │   │ (Shard C)   │   │ (Shard ...) │
-    └─────────────┘   └─────────────┘   └─────────────┘   └─────────────┘
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         TPS SCALING EQUATION                                │
+│                                                                             │
+│   TPS = Validators × BatchesPerBlock × TxsPerBatch ÷ AvgLatency            │
+│                                                                             │
+│   Traditional:  1  ×    1      ×   1000    ÷    10s     = 100 TPS           │
+│   1 Shard:     1000 ×    1     ×   1000    ÷    1s      = 1,000,000 TPS   │
+│   10 Shards:   10000×    1     ×   1000    ÷    1s      = 10,000,000 TPS  │
+│   100 Shards:  100000×    1     ×   1000    ÷    1s     = 100,000,000 TPS │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 10.2 Scaling Parameters
+### 10.3 How It Works
 
-```python
-MAX_VALIDATORS_PER_SHARD = 1000     # Max validators per main node
-MAX_BATCHES_PER_BLOCK = 100         # Batches per block
-MAX_TRANSACTIONS_PER_BATCH = 1000  # Transactions per batch
-BLOCK_TIME = 1                      # 1 second
-
-# Theoretical max per shard:
-# 1,000 validators × 1 batch/sec × 1,000 txs = 1M TPS/shard
-# With 100 shards: 100M+ TPS (infinite scaling!)
+**Step 1: Address-Based Routing**
+```
+shard_id = hash(recipient_address) % total_shards
 ```
 
-### 10.3 Sharding Components
+**Step 2: Validator Distribution**
+- Validators subscribe to ONE shard
+- Each shard operates independently
+- No validator processes transactions outside their shard
 
-| Component | Purpose |
-|-----------|---------|
-| **Shard Router** | Routes transactions to correct main node by address |
-| **Super Node** | Manages multiple shards, handles cross-shard TX |
-| **ZK Node** | Zero-knowledge proofs for sharding |
-| **Auto Scaler** | Adds/removes shards based on load |
+**Step 3: Block Production (Per Shard)**
+```
+Shard 0: Block 1 → Block 2 → Block 3 → ...
+Shard 1: Block 1 → Block 2 → Block 3 → ...
+Shard 2: Block 1 → Block 2 → Block 3 → ...
+...all in parallel!
+```
+
+**Step 4: Cross-Shard Transactions**
+```
+Alice (Shard 0) → Bob (Shard 1)
+
+1. Lock Alice's tokens on Shard 0
+2. Create "lock proof" message
+3. Bob's shard verifies proof
+4. Credit Bob on Shard 1
+5. Debit Alice on Shard 0
+6. Release lock
+```
+
+### 10.4 Dynamic Sharding
+
+The network **auto-scales** based on demand:
+
+```go
+type ShardMetrics struct {
+    TxPerSecond      float64
+    ValidatorCount  int
+    QueueDepth       int
+    AvgLatency       time.Duration
+}
+
+// Auto-scaler logic
+if metrics.QueueDepth > 10000 {
+    spawnNewShard()  // Split load
+}
+if metrics.TxPerSecond < 100 && ValidatorCount > 10 {
+    mergeShards()    // Consolidate
+}
+```
+
+### 10.5 Infinite Scaling Properties
+
+| Property | Traditional | Our Architecture |
+|----------|-------------|------------------|
+| TPS/Validator | Decreases | Constant |
+| Add Validators | No effect | Increases TPS |
+| Add Shards | Hard fork | Live update |
+| Latency | Increases | Stays constant |
+| Cost/TX | Increases | Decreases |
+
+### 10.6 Key Innovations
+
+1. **Stateless Validators**: Validators only track their shard's state
+2. **Light Clients**: Wallets only download relevant shard data
+3. **Shard Gateway**: Unified API hides sharding from users
+4. **Proof Aggregation**: Compress cross-shard proofs for efficiency
 
 ---
 
