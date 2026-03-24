@@ -1,15 +1,15 @@
-# Wrath of Cali Blockchain
+# Wrath of Cali Scaling Layer
 
 > ⚠️ **Warning: This is experimental and untested code.** 
-> Do not use for production or with real funds. Use at your own risk.
+> Do not use for production. Use at your own risk.
 > 
-> **Note:** This is NOT a real, functioning blockchain. All values ( TPS, tokenomics, etc.) 
+> **Note:** This is NOT a real blockchain. All values (TPS, tokenomics, etc.) 
 > are placeholders to demonstrate the infinite TPS architecture concept.
 
 **Created by Laura Wolf (Brixa420)** - 2026
 **Written by Elara AI**
 
-A lightweight layered blockchain for gaming economies with **infinite TPS scaling**.
+A **drop-in horizontal scaling layer** that supplements any blockchain with infinite TPS.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.11+-yellow.svg)
@@ -17,13 +17,14 @@ A lightweight layered blockchain for gaming economies with **infinite TPS scalin
 
 ## Features
 
-- ⚡ **1-second block times** - Fast block production
+- ⚡ **1-second block times** - Fast block production per shard
 - 🚀 **Infinite TPS Scaling** - Horizontal sharding for unlimited throughput
 - 🔒 **Proof of Stake** - Secure validator consensus
-- 💰 **Native Token (CAL)** - In-game cryptocurrency
+- 💰 **Native Token (CAL)** - Demonstrates economics (optional)
 - 🎮 **Gaming-Optimized** - Designed for game economies
-- 🌐 **Layered Architecture** - Scalable validator network
+- 🌐 **Drop-In Layer** - Works with ANY blockchain (Ethereum, Solana, etc.)
 - 📱 **Lightweight** - Run on minimal hardware
+- 🔀 **Chain-Agnostic** - Supplement, not replace
 
 ## Performance
 

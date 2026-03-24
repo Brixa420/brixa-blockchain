@@ -1,20 +1,24 @@
-# Wrath of Cali Blockchain - Whitepaper
+# Wrath of Cali Scaling Layer - Whitepaper
 
 > ⚠️ **Warning: This is experimental and untested code.**
-> Do not use for production or with real funds. The concepts are sound but 
-> the implementation has not been audited or tested.
+> Do not use for production. The concepts are sound but the implementation 
+> has not been audited or tested.
 >
-> **Note:** This is NOT a real, functioning blockchain. All values ( TPS, tokenomics, 
+> **Note:** This is NOT a real blockchain. All values (TPS, tokenomics, 
 > consensus parameters) are placeholders to demonstrate the infinite TPS architecture concept.
 
 **Author: Laura Wolf (Brixa420)**
 **Written by Elara AI** - March 2026
 
-## A Lightweight Layered Blockchain for Gaming Economies
+## A Drop-In Horizontal Scaling Layer for Any Blockchain
 
 ### Abstract
 
-Wrath of Cali introduces a novel layered blockchain architecture designed specifically for gaming economies. By separating transaction collection (validators) from block production (main node), we achieve sub-second block times while maintaining decentralization and security. The native token, **Calicos**, powers an in-game economy with staking, NFTs, and governance.
+Wrath of Cali introduces a **drop-in horizontal scaling layer** that can be layered onto any existing blockchain to achieve infinite TPS. Rather than replacing the base chain, it acts as a scaling supplement - processing transactions in parallel shards while the underlying chain handles final settlement.
+
+This architecture solves the blockchain trilemma by separating transaction processing (shards) from consensus (base chain), achieving **unlimited throughput** without sacrificing decentralization or security.
+
+The native token concept demonstrates the economics, but the scaling layer itself is chain-agnostic and can supplement Ethereum, Solana, Bitcoin, or any blockchain that needs more TPS.
 
 ---
 
