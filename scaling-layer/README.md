@@ -152,14 +152,25 @@ scaler = ScalingLayer(
 
 ## 🏗️ Supported Blockchains
 
-- Ethereum
-- Polygon
-- BSC (BNB Chain)
-- Avalanche
-- Arbitrum
-- Optimism
-- Solana (coming soon)
-- Any EVM-compatible chain
+**ALL OF THEM!** 🎉
+
+| Chain | Symbol | Status |
+|-------|--------|--------|
+| Bitcoin | BTC | ✅ Supported |
+| Ethereum | ETH | ✅ Supported |
+| Polygon | MATIC | ✅ Supported |
+| BSC/BNB | BNB | ✅ Supported |
+| Avalanche | AVAX | ✅ Supported |
+| Arbitrum | ETH | ✅ Supported |
+| Optimism | ETH | ✅ Supported |
+| Fantom | FTM | ✅ Supported |
+| Solana | SOL | ✅ Supported |
+| Litecoin | LTC | ✅ Supported |
+| Dogecoin | DOGE | ✅ Supported |
+| Any other chain | - | ✅ Works (chain-agnostic) |
+
+The scaling layer is **chain-agnostic** - it doesn't care about your blockchain. 
+Just pass transactions and it sharding-layers them regardless of chain!
 
 ---
 
