@@ -3,6 +3,8 @@
 > ⚠️ **Warning: This is experimental and untested code.**
 > Do not use for production or with real funds. The concepts are sound but the implementation has not been audited or tested.
 
+**Author: Laura Wolf (Brixa420)** - March 2026
+
 ## A Lightweight Layered Blockchain for Gaming Economies
 
 ### Abstract
@@ -460,5 +462,5 @@ blockchain/
 
 ---
 
-*Written by the Wrath of Cali Development Team*
+*Written by Laura Wolf (Brixa420) - 2026*
 *License: MIT*

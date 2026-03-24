@@ -3,6 +3,8 @@
 > ⚠️ **Warning: This is experimental and untested code.** 
 > Do not use for production or with real funds. Use at your own risk.
 
+**Created by Laura Wolf (Brixa420)** - 2026
+
 A lightweight layered blockchain for gaming economies with **infinite TPS scaling**.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
