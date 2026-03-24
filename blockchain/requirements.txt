@@ -1,0 +1,4 @@
+# Wrath of Cali Blockchain Requirements
+requests>=2.28.0
+cryptography>=41.0.0
+flask>=2.3.0

@@ -27,3 +27,19 @@ Thumbs.db
 *.db
 *.jsonl
 wallets/
+
+# Large binary assets (download separately)
+*.zip
+*.fbx
+*.obj
+*.png
+*.jpg
+assets/dungeon-kit/
+assets/game_assets/
+
+# Database
+*.db
+*.db-journal
+
+# Wallets
+wallets/

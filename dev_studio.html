@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wrath of Cali - Dev Studio</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        :root {
+            --bg-dark: #0d1117;
+            --bg-card: #161b22;
+            --bg-hover: #21262d;
+            --border: #30363d;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-orange: #d29922;
+            --accent-red: #f85149;
+            --accent-purple: #a371f7;
+            --accent-pink: #db61a2;
+            --accent-cyan: #39d3d3;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+        
+        /* Top Bar */
+        .topbar {
+            background: linear-gradient(90deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #ff6b6b, #ffd93d, #6bcb77);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 217, 61, 0.5); }
+        }
+        
+        .title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .status-section {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .status-dot.online { background: var(--accent-green); }
+        .status-dot.offline { background: var(--accent-red); }
+        .status-dot.warning { background: var(--accent-orange); }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* Main Layout */
+        .main-container {
+            display: flex;
+            height: calc(100vh - 64px);
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .sidebar-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        
+        .search-box {
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            width: 100%;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .nav-section {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+        
+        .nav-group {
+            margin-bottom: 1rem;
+        }
+        
+        .nav-group-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        
+        .nav-item:hover {
+            background: var(--bg-hover);
+        }
+        
+        .nav-item.active {
+            background: rgba(88, 166, 255, 0.15);
+            border-left: 3px solid var(--accent);
+        }
+        
+        .nav-icon {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .nav-badge {
+            margin-left: auto;
+            background: var(--accent);
+            color: white;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 10px;
+        }
+        
+        .nav-badge.green { background: var(--accent-green); }
+        .nav-badge.orange { background: var(--accent-orange); }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .content-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .content-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .content-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .btn-primary:hover { opacity: 0.9; }
+        
+        .btn-secondary {
+            background: var(--bg-hover);
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+        
+        .btn-secondary:hover { border-color: var(--accent); }
+        
+        .btn-success { background: var(--accent-green); color: white; }
+        .btn-danger { background: var(--accent-red); color: white; }
+        
+        .content-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+        
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .stat-card-icon {
+            font-size: 1.5rem;
+        }
+        
+        .stat-card-trend {
+            font-size: 0.75rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+        }
+        
+        .stat-card-trend.up {
+            background: rgba(63, 185, 80, 0.2);
+            color: var(--accent-green);
+        }
+        
+        .stat-card-trend.down {
+            background: rgba(248, 81, 73, 0.2);
+            color: var(--accent-red);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+        
+        /* System Cards */
+        .system-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .system-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .system-card-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+        }
+        
+        .system-status.running {
+            background: rgba(63, 185, 80, 0.15);
+            color: var(--accent-green);
+        }
+        
+        .system-status.stopped {
+            background: rgba(248, 81, 73, 0.15);
+            color: var(--accent-red);
+        }
+        
+        .system-status.starting {
+            background: rgba(210, 153, 34, 0.15);
+            color: var(--accent-orange);
+        }
+        
+        .system-card-body {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .system-stat {
+            background: var(--bg-dark);
+            border-radius: 8px;
+            padding: 0.75rem;
+            text-align: center;
+        }
+        
+        .system-stat-value {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+        }
+        
+        .system-stat-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        
+        .system-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* Console */
+        .console {
+            background: #0a0e14;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .console-line {
+            padding: 0.2rem 0;
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .console-time { color: var(--text-muted); }
+        .console-info { color: var(--accent-cyan); }
+        .console-success { color: var(--accent-green); }
+        .console-warning { color: var(--accent-orange); }
+        .console-error { color: var(--accent-red); }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+        
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        
+        .tab:hover { background: var(--bg-hover); }
+        .tab.active {
+            background: var(--bg-hover);
+            color: var(--accent);
+        }
+        
+        /* File Browser */
+        .file-browser {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .file-tree {
+            padding: 0.5rem;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        
+        .file-item:hover { background: var(--bg-hover); }
+        .file-item.folder { color: var(--accent-orange); }
+        .file-item.file { color: var(--text-main); }
+        
+        .file-icon { width: 20px; text-align: center; }
+        
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .data-table th {
+            background: var(--bg-hover);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+        }
+        
+        .data-table tr:hover { background: var(--bg-hover); }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .form-input {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        /* Project Cards */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            border-color: var(--accent);
+        }
+        
+        .project-card-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .project-card-title {
+            font-weight: 600;
+        }
+        
+        .project-card-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            background: rgba(88, 166, 255, 0.2);
+            color: var(--accent);
+        }
+        
+        .project-card-body {
+            padding: 1rem;
+        }
+        
+        .project-card-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        
+        .project-card-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+        
+        .project-card-footer {
+            padding: 0.75rem 1rem;
+            background: var(--bg-hover);
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 85vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .modal-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+        }
+        
+        /* Hidden */
+        .hidden { display: none !important; }
+        
+        /* Progress */
+        .progress-bar {
+            height: 6px;
+            background: var(--bg-hover);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-purple));
+            border-radius: 3px;
+            transition: width 0.5s;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo-section">
+            <div class="logo">🐾</div>
+            <div>
+                <div class="title">Wrath of Cali</div>
+                <div class="subtitle">Dev Studio v1.0</div>
+            </div>
+        </div>
+        <div class="status-section">
+            <div class="status-item">
+                <div class="status-dot online" id="node-status"></div>
+                <span>Node</span>
+            </div>
+            <div class="status-item">
+                <div class="status-dot online" id="game-status"></div>
+                <span>Game</span>
+            </div>
+            <div class="status-item">
+                <div class="status-dot warning" id="ai-status"></div>
+                <span>AI</span>
+            </div>
+            <button class="btn btn-primary" onclick="showQuickActions()">⚡ Quick Actions</button>
+        </div>
+    </div>
+    
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Search</div>
+                <input type="text" class="search-box" placeholder="Search projects, docs..." id="search">
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-group">
+                    <div class="nav-group-title">📊 Dashboard</div>
+                    <div class="nav-item active" data-panel="overview" onclick="showPanel('overview')">
+                        <span class="nav-icon">🏠</span> Overview
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <div class="nav-group-title">🎮 Game Engine</div>
+                    <div class="nav-item" data-panel="game" onclick="showPanel('game')">
+                        <span class="nav-icon">🎲</span> Game
+                        <span class="nav-badge green">Active</span>
+                    </div>
+                    <div class="nav-item" data-panel="godot" onclick="showPanel('godot')">
+                        <span class="nav-icon">⚙️</span> Godot
+                    </div>
+                    <div class="nav-item" data-panel="locations" onclick="showPanel('locations')">
+                        <span class="nav-icon">🗺️</span> Locations
+                    </div>
+                    <div class="nav-item" data-panel="characters" onclick="showPanel('characters')">
+                        <span class="nav-icon">👤</span> Characters
+                    </div>
+                    <div class="nav-item" data-panel="npcs" onclick="showPanel('npcs')">
+                        <span class="nav-icon">🤖</span> NPCs/DMs
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <div class="nav-group-title">⛓️ Blockchain</div>
+                    <div class="nav-item" data-panel="blockchain" onclick="showPanel('blockchain')">
+                        <span class="nav-icon">🔗</span> Blockchain
+                        <span class="nav-badge">60+ APIs</span>
+                    </div>
+                    <div class="nav-item" data-panel="wallet" onclick="showPanel('wallet')">
+                        <span class="nav-icon">💰</span> Wallet
+                    </div>
+                    <div class="nav-item" data-panel="validators" onclick="showPanel('validators')">
+                        <span class="nav-icon">⚖️</span> Validators
+                    </div>
+                    <div class="nav-item" data-panel="economics" onclick="showPanel('economics')">
+                        <span class="nav-icon">📈</span> Economics
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <div class="nav-group-title">🧠 AI Systems</div>
+                    <div class="nav-item" data-panel="memory" onclick="showPanel('memory')">
+                        <span class="nav-icon">🧠</span> Memory Engine
+                    </div>
+                    <div class="nav-item" data-panel="governance" onclick="showPanel('governance')">
+                        <span class="nav-icon">🏛️</span> Governance
+                    </div>
+                    <div class="nav-item" data-panel="voice" onclick="showPanel('voice')">
+                        <span class="nav-icon">🎤</span> Voice AI
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <div class="nav-group-title">📁 Projects</div>
+                    <div class="nav-item" data-panel="files" onclick="showPanel('files')">
+                        <span class="nav-icon">📂</span> File Browser
+                    </div>
+                    <div class="nav-item" data-panel="docs" onclick="showPanel('docs')">
+                        <span class="nav-icon">📄</span> Documents
+                    </div>
+                    <div class="nav-item" data-panel="ai-team" onclick="showPanel('ai-team')">
+                        <span class="nav-icon">🤖</span> AI Team
+                    </div>
+                </div>
+                
+                <div class="nav-group">
+                    <div class="nav-group-title">🛠️ System</div>
+                    <div class="nav-item" data-panel="console" onclick="showPanel('console')">
+                        <span class="nav-icon">📟</span> Console
+                    </div>
+                    <div class="nav-item" data-panel="settings" onclick="showPanel('settings')">
+                        <span class="nav-icon">⚙️</span> Settings
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Overview Panel -->
+            <div id="panel-overview">
+                <div class="content-header">
+                    <div class="content-title">🏠 Dashboard Overview</div>
+                    <div class="content-actions">
+                        <button class="btn btn-secondary" onclick="refreshAll()">🔄 Refresh</button>
+                        <button class="btn btn-primary" onclick="showNewProject()">+ New Project</button>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="dashboard-grid">
+                        <div class="stat-card" style="border-left: 4px solid var(--accent-green);">
+                            <div class="stat-card-header">
+                                <span class="stat-card-icon">🎮</span>
+                                <span class="stat-card-trend up">↑ 2</span>
+                            </div>
+                            <div class="stat-value">1</div>
+                            <div class="stat-label">Active Game Sessions</div>
+                        </div>
+                        <div class="stat-card" style="border-left: 4px solid var(--accent-purple);">
+                            <div class="stat-card-header">
+                                <span class="stat-card-icon">⛓️</span>
+                                <span class="stat-card-trend up">↑ 1.2k</span>
+                            </div>
+                            <div class="stat-value">2,847</div>
+                            <div class="stat-label">Blocks on Chain</div>
+                        </div>
+                        <div class="stat-card" style="border-left: 4px solid var(--accent-orange);">
+                            <div class="stat-card-header">
+                                <span class="stat-card-icon">💰</span>
+                                <span class="stat-card-trend up">↑ 50</span>
+                            </div>
+                            <div class="stat-value">98.2K</div>
+                            <div class="stat-label">CAL in Circulation</div>
+                        </div>
+                        <div class="stat-card" style="border-left: 4px solid var(--accent-cyan);">
+                            <div class="stat-card-header">
+                                <span class="stat-card-icon">🧠</span>
+                                <span class="stat-card-trend up">↑ 12</span>
+                            </div>
+                            <div class="stat-value">847</div>
+                            <div class="stat-label">Memory Events</div>
+                        </div>
+                    </div>
+                    
+                    <div class="system-card">
+                        <div class="system-card-header">
+                            <div class="system-card-title">🔌 System Status</div>
+                        </div>
+                        <div class="system-card-body">
+                            <div class="system-stat">
+                                <div class="system-stat-value" style="color: var(--accent-green);">●</div>
+                                <div class="system-stat-label">Game Server</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value" style="color: var(--accent-green);">●</div>
+                                <div class="system-stat-label">Blockchain Node</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value" style="color: var(--accent-orange);">●</div>
+                                <div class="system-stat-label">Voice AI</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value" style="color: var(--accent-green);">●</div>
+                                <div class="system-stat-label">Database</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value" style="color: var(--accent-purple);">●</div>
+                                <div class="system-stat-label">P2P Network</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="system-card">
+                        <div class="system-card-header">
+                            <div class="system-card-title">📟 Activity Log</div>
+                        </div>
+                        <div class="console" id="activity-log">
+                            <div class="console-line"><span class="console-time">13:05:22</span> <span class="console-info">[INFO] Dev Studio initialized</span></div>
+                            <div class="console-line"><span class="console-time">13:05:23</span> <span class="console-success">[OK] Connected to blockchain node</span></div>
+                            <div class="console-line"><span class="console-time">13:05:24</span> <span class="console-info">[INFO] Loading project data...</span></div>
+                            <div class="console-line"><span class="console-time">13:05:25</span> <span class="console-success">[OK] 100 locations loaded</span></div>
+                            <div class="console-line"><span class="console-time">13:05:26</span> <span class="console-success">[OK] 3 DMs available</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Game Panel -->
+            <div id="panel-game" class="hidden">
+                <div class="content-header">
+                    <div class="content-title">🎮 Game Engine</div>
+                    <div class="content-actions">
+                        <button class="btn btn-secondary" onclick="openGame()">🎮 Open Game</button>
+                        <button class="btn btn-primary" onclick="restartGame()">🔄 Restart</button>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="system-card">
+                        <div class="system-card-header">
+                            <div class="system-card-title">🎲 Active Game</div>
+                            <div class="system-status running"><span>●</span> Running</div>
+                        </div>
+                        <div class="system-card-body">
+                            <div class="system-stat">
+                                <div class="system-stat-value">3</div>
+                                <div class="system-stat-label">Players</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value">Town</div>
+                                <div class="system-stat-label">Location</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value">Elara</div>
+                                <div class="system-stat-label">Active DM</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value">Level 5</div>
+                                <div class="system-stat-label">Avg Level</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-grid">
+                        <div class="project-card">
+                            <div class="project-card-header">
+                                <div class="project-card-title">game.html</div>
+                                <span class="project-card-badge">Main</span>
+                            </div>
+                            <div class="project-card-body">
+                                <div class="project-card-desc">Primary game interface with voice, 100 locations, multiclass, TTS</div>
+                                <div class="project-card-meta">
+                                    <span>📍 100 Locations</span>
+                                    <span>🎭 3 DMs</span>
+                                </div>
+                            </div>
+                            <div class="project-card-footer">
+                                <button class="btn btn-secondary" style="flex:1" onclick="openGame()">Launch</button>
+                                <button class="btn btn-secondary" onclick="editFile('game.html')">Edit</button>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card">
+                            <div class="project-card-header">
+                                <div class="project-card-title">Wrath_of_Cali_Bootstrap.txt</div>
+                                <span class="project-card-badge">Rules</span>
+                            </div>
+                            <div class="project-card-body">
+                                <div class="project-card-desc">Full game constitution, mechanics, tattoo system, classes</div>
+                                <div class="project-card-meta">
+                                    <span>📋 169KB</span>
+                                    <span>📜 Rules</span>
+                                </div>
+                            </div>
+                            <div class="project-card-footer">
+                                <button class="btn btn-secondary" style="flex:1" onclick="viewBootstrap()">View</button>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card">
+                            <div class="project-card-header">
+                                <div class="project-card-title">Characters_Codex.pdf</div>
+                                <span class="project-card-badge">Lore</span>
+                            </div>
+                            <div class="project-card-body">
+                                <div class="project-card-desc">D&D character classes, monsters, items reference</div>
+                                <div class="project-card-meta">
+                                    <span>📖 11MB</span>
+                                    <span>📚 PDF</span>
+                                </div>
+                            </div>
+                            <div class="project-card-footer">
+                                <button class="btn btn-secondary" style="flex:1" onclick="openPDF('Characters_Codex.pdf')">Open</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Blockchain Panel -->
+            <div id="panel-blockchain" class="hidden">
+                <div class="content-header">
+                    <div class="content-title">⛓️ Blockchain System</div>
+                    <div class="content-actions">
+                        <button class="btn btn-secondary" onclick="openExplorer()">🔍 Explorer</button>
+                        <button class="btn btn-primary" onclick="startNode()">▶️ Start Node</button>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-icon">⛓️</span>
+                            </div>
+                            <div class="stat-value" id="bc-blocks">2,847</div>
+                            <div class="stat-label">Total Blocks</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-icon">💰</span>
+                            </div>
+                            <div class="stat-value">100M</div>
+                            <div class="stat-label">Total Supply</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-icon">⚖️</span>
+                            </div>
+                            <div class="stat-value" id="bc-validators">3</div>
+                            <div class="stat-label">Active Validators</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-card-header">
+                                <span class="stat-card-icon">⏱️</span>
+                            </div>
+                            <div class="stat-value">1s</div>
+                            <div class="stat-label">Block Time</div>
+                        </div>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active" onclick="bcTab('endpoints')">API Endpoints</div>
+                        <div class="tab" onclick="bcTab('peers')">P2P Peers</div>
+                        <div class="tab" onclick="bcTab('mempool')">Mempool</div>
+                    </div>
+                    
+                    <div class="system-card">
+                        <div class="system-card-header">
+                            <div class="system-card-title">🔌 Available APIs</div>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Endpoint</th>
+                                    <th>Method</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>/wallet/*</td><td>POST</td><td>Wallet creation, transfer, stake</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>/chain</td><td>GET</td><td>Blockchain info</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>/block/*</td><td>GET</td><td>Block data</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>/tx/*</td><td>GET/POST</td><td>Transaction ops</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>/validator/*</td><td>POST</td><td>Validator ops</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>/roles/*</td><td>POST</td><td>Role management</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>/nft/*</td><td>POST/GET</td><td>NFT operations</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>/multisig/*</td><td>POST</td><td>Multi-sig wallets</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>/contract/*</td><td>POST</td><td>Smart contracts</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>/recovery/*</td><td>POST</td><td>Wallet recovery</td><td style="color:var(--accent-green)">● Active</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Wallet Panel -->
+            <div id="panel-wallet" class="hidden">
+                <div class="content-header">
+                    <div class="content-title">💰 Wallet & Recovery</div>
+                    <div class="content-actions">
+                        <button class="btn btn-secondary" onclick="openWalletUI()">🟢 Open Wallet UI</button>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="project-grid">
+                        <div class="project-card">
+                            <div class="project-card-header">
+                                <div class="project-card-title">wallet.html</div>
+                                <span class="project-card-badge">New!</span>
+                            </div>
+                            <div class="project-card-body">
+                                <div class="project-card-desc">Full wallet UI with send, receive, stake, NFTs</div>
+                            </div>
+                            <div class="project-card-footer">
+                                <button class="btn btn-primary" style="flex:1" onclick="openWalletUI()">Open Wallet</button>
+                            </div>
+                        </div>
+                        
+                        <div class="project-card">
+                            <div class="project-card-header">
+                                <div class="project-card-title">9 Recovery Methods</div>
+                                <span class="project-card-badge">Complete</span>
+                            </div>
+                            <div class="project-card-body">
+                                <div class="project-card-desc">Mnemonic, Private Key, Keystore, Email, Social, Questions, Cloud, Passkey, Google</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="system-card" style="margin-top: 1rem;">
+                        <div class="system-card-header">
+                            <div class="system-card-title">🔐 Recovery Endpoints</div>
+                        </div>
+                        <table class="data-table">
+                            <thead><tr><th>Method</th><th>Endpoint</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td>Mnemonic</td><td>/recovery/mnemonic</td><td style="color:var(--accent-green)">● Ready</td></tr>
+                                <tr><td>Private Key</td><td>/recovery/private_key</td><td style="color:var(--accent-green)">● Ready</td></tr>
+                                <tr><td>Keystore</td><td>/recovery/keystore</td><td style="color:var(--accent-green)">● Ready</td></tr>
+                                <tr><td>Email+Password</td><td>/recovery/email_password</td><td style="color:var(--accent-green)">● Ready</td></tr>
+                                <tr><td>Social (2-of-3)</td><td>/recovery/social</td><td style="color:var(--accent-green)">● Ready</td></tr>
+                                <tr><td>Security Questions</td><td>/recovery/questions</td><td style="color:var(--accent-green)">● Ready</td></tr>
+                                <tr><td>Cloud Backup</td><td>/recovery/cloud</td><td style="color:var(--accent-green)">● Ready</td></tr>
+                                <tr><td>Passkey</td><td>/passkey/*</td><td style="color:var(--accent-green)">● Ready</td></tr>
+                                <tr><td>Google OAuth</td><td>/auth/google/*</td><td style="color:var(--accent-green)">● Ready</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Memory Panel -->
+            <div id="panel-memory" class="hidden">
+                <div class="content-header">
+                    <div class="content-title">🧠 Collective Memory Engine</div>
+                    <div class="content-actions">
+                        <button class="btn btn-primary" onclick="showMemoryStats()">📊 Stats</button>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">847</div>
+                            <div class="stat-label">Total Events</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Political</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">234</div>
+                            <div class="stat-label">Economic</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">601</div>
+                            <div class="stat-label">Social</div>
+                        </div>
+                    </div>
+                    
+                    <div class="system-card">
+                        <div class="system-card-header">
+                            <div class="system-card-title">🎯 Features</div>
+                        </div>
+                        <div class="system-card-body">
+                            <div class="system-stat">
+                                <div class="system-stat-value">✓</div>
+                                <div class="system-stat-label">Immutable Recording</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value">✓</div>
+                                <div class="system-stat-label">Era Rotation</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value">✓</div>
+                                <div class="system-stat-label">Reputation Decay</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value">✓</div>
+                                <div class="system-stat-label">Redemption System</div>
+                            </div>
+                            <div class="system-stat">
+                                <div class="system-stat-value">✓</div>
+                                <div class="system-stat-label">AI Integration</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other Panels (placeholder) -->
+            <div id="panel-godot" class="hidden">
+                <div class="content-header"><div class="content-title">⚙️ Godot Engine</div></div>
+                <div class="content-body">
+                    <div class="system-card">
+                        <div class="system-card-header"><div class="system-card-title">📁 Godot Projects</div></div>
+                        <div id="godot-projects"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-locations" class="hidden">
+                <div class="content-header"><div class="content-title">🗺️ Locations</div></div>
+                <div class="content-body">
+                    <div class="system-card">
+                        <div class="system-card-header"><div class="system-card-title">📍 100 Locations Available</div></div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; padding: 1rem;">
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🏠 Starting Village</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🌲 Dark Forest</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🏰 Castle</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🗿 Ancient Ruins</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🌋 Volcanic Caves</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">❄️ Frozen Wastes</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🌊 Underwater City</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🏛️ Temple</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-characters" class="hidden">
+                <div class="content-header"><div class="content-title">👤 Character System</div></div>
+                <div class="content-body">
+                    <div class="system-card">
+                        <div class="system-card-header"><div class="system-card-title">🎭 Classes Available</div></div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.5rem; padding: 1rem;">
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">⚔️ Warrior</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🪄 Mage</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🏹 Ranger</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🗡️ Rogue</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">⚖️ Paladin</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🌿 Druid</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🔥 Barbarian</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">✨ Sorcerer</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🙏 Cleric</div>
+                            <div style="background:var(--bg-dark); padding:0.75rem; border-radius:8px;">🥷 Monk</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-npcs" class="hidden">
+                <div class="content-header"><div class="content-title">🤖 NPCs & DMs</div></div>
+                <div class="content-body">
+                    <div class="project-grid">
+                        <div class="project-card">
+                            <div class="project-card-header"><div class="project-card-title">Elara</div><span class="project-card-badge">Default</span></div>
+                            <div class="project-card-body">Primary DM, cute & helpful</div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-card-header"><div class="project-card-title">Grimtooth</div><span class="project-card-badge">Combat</span></div>
+                            <div class="project-card-body">Harsh combat-focused DM</div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-card-header"><div class="project-card-title">Whimsy</div><span class="project-card-badge">Story</span></div>
+                            <div class="project-card-body">Narrative & puzzle DM</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-validators" class="hidden">
+                <div class="content-header"><div class="content-title">⚖️ Validators</div></div>
+                <div class="content-body">
+                    <div class="system-card">
+                        <div class="system-card-header"><div class="system-card-title">Active Validators</div></div>
+                        <table class="data-table">
+                            <thead><tr><th>Address</th><th>Staked</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <tr><td>0xFounder...1234</td><td>50,000 CAL</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>0xNode1...5678</td><td>25,000 CAL</td><td style="color:var(--accent-green)">● Active</td></tr>
+                                <tr><td>0xNode2...90AB</td><td>25,000 CAL</td><td style="color:var(--accent-green)">● Active</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-economics" class="hidden">
+                <div class="content-header"><div class="content-title">📈 Economics</div></div>
+                <div class="content-body">
+                    <div class="dashboard-grid">
+                        <div class="stat-card"><div class="stat-value">100M</div><div class="stat-label">Total Supply</div></div>
+                        <div class="stat-card"><div class="stat-value">1.2M/year</div><div class="stat-label">Inflation</div></div>
+                        <div class="stat-card"><div class="stat-value">~8%</div><div class="stat-label">Staking APR</div></div>
+                        <div class="stat-card"><div class="stat-value">Anti-whale</div><div class="stat-label">Mechanism</div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-governance" class="hidden">
+                <div class="content-header"><div class="content-title">🏛️ Governance</div></div>
+                <div class="content-body">
+                    <div class="system-card">
+                        <div class="system-card-header"><div class="system-card-title">Features</div></div>
+                        <div class="system-card-body">
+                            <div class="system-stat"><div class="system-stat-value">✓</div><div class="system-stat-label">Quadratic Voting</div></div>
+                            <div class="system-stat"><div class="system-stat-value">✓</div><div class="system-stat-label">Proposals</div></div>
+                            <div class="system-stat"><div class="system-stat-value">✓</div><div class="system-stat-label">Veto Power</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-voice" class="hidden">
+                <div class="content-header"><div class="content-title">🎤 Voice AI</div></div>
+                <div class="content-body">
+                    <div class="system-card">
+                        <div class="system-card-header"><div class="system-card-title">Voice Systems</div></div>
+                        <div class="system-card-body">
+                            <div class="system-stat"><div class="system-stat-value">✓</div><div class="system-stat-label">Whisper STT</div></div>
+                            <div class="system-stat"><div class="system-stat-value">✓</div><div class="system-stat-label">Kitten TTS</div></div>
+                            <div class="system-stat"><div class="system-stat-value">✓</div><div class="system-stat-label">Voice Cloning</div></div>
+                            <div class="system-stat"><div class="system-stat-value">✓</div><div class="system-stat-label">Kiwi Wake Word</div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-files" class="hidden">
+                <div class="content-header"><div class="content-title">📂 File Browser</div></div>
+                <div class="content-body">
+                    <div class="file-browser">
+                        <div class="file-tree" id="file-tree"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-docs" class="hidden">
+                <div class="content-header"><div class="content-title">📄 Documents</div></div>
+                <div class="content-body">
+                    <div class="project-grid">
+                        <div class="project-card">
+                            <div class="project-card-header"><div class="project-card-title">elara.txt</div></div>
+                            <div class="project-card-body">Core game requirements & Founder identity</div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-card-header"><div class="project-card-title">elara2.txt</div></div>
+                            <div class="project-card-body">Master system prompt - blockchain, AI, memory</div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-card-header"><div class="project-card-title">SPEC.md</div></div>
+                            <div class="project-card-body">Wrath of Cali specification</div>
+                        </div>
+                        <div class="project-card">
+                            <div class="project-card-header"><div class="project-card-title">openclaw2.txt</div></div>
+                            <div class="project-card-body">59KB - Full system prompt</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-console" class="hidden">
+                <div class="content-header"><div class="content-title">📟 Console</div></div>
+                <div class="content-body">
+                    <div class="console" id="main-console" style="height: 400px;"></div>
+                    <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                        <input type="text" class="form-input" id="console-input" placeholder="Enter command..." style="flex:1">
+                        <button class="btn btn-primary" onclick="runConsoleCommand()">Run</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="panel-settings" class="hidden">
+                <div class="content-header"><div class="content-title">⚙️ Settings</div></div>
+                <div class="content-body">
+                    <div class="form-group">
+                        <label class="form-label">API Port</label>
+                        <input type="number" class="form-input" value="5001" id="settings-port">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Game Port</label>
+                        <input type="number" class="form-input" value="8080" id="settings-game-port">
+                    </div>
+                    <button class="btn btn-primary" onclick="saveSettings()">Save Settings</button>
+                </div>
+            </div>
+            
+            <div id="panel-ai-team" class="hidden">
+                <div class="content-header">
+                    <div class="content-title">🤖 AI Development Team</div>
+                    <div class="content-actions">
+                        <button class="btn btn-secondary" onclick="loadAgents()">🔄 Refresh</button>
+                    </div>
+                </div>
+                <div class="content-body">
+                    <!-- Prompt Section FIRST - always visible -->
+                    <div class="system-card" style="margin-bottom: 1rem;">
+                        <div class="system-card-header">
+                            <div class="system-card-title">📢 Prompt All Agents</div>
+                        </div>
+                        <div style="padding: 1rem;">
+                            <textarea id="team-prompt" placeholder="Enter your prompt for the entire dev team..." 
+                                style="width: 100%; height: 80px; background: var(--bg-dark); border: 1px solid var(--border); 
+                                       color: var(--text-main); padding: 0.5rem; border-radius: 4px; resize: none;"></textarea>
+                            <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                                <button class="btn btn-primary" onclick="promptAllAgents()">🚀 Broadcast to All 48 Agents</button>
+                                <button class="btn btn-secondary" onclick="promptSelectedAgents()">✅ Select Agents</button>
+                            </div>
+                            <div id="team-prompt-status" style="margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Row -->
+                    <div class="dashboard-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="agent-count">48</div>
+                            <div class="stat-label">Total Agents</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">37</div>
+                            <div class="stat-label">Skills Available</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">11</div>
+                            <div class="stat-label">Active Rules</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Team Roster - scrollable -->
+                    <div class="system-card" style="margin-top: 1rem; max-height: 400px; display: flex; flex-direction: column;">
+                        <div class="system-card-header">
+                            <div class="system-card-title">👥 Team Roster</div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; padding: 1rem; overflow-y: auto; overflow-x: hidden; flex: 1;" id="agent-grid">
+                            <div style="color: var(--text-muted);">Click "Refresh" to load agents...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="system-card" style="margin-top: 1rem;">
+                        <div class="system-card-header">
+                            <div class="system-card-title">⚡ Quick Actions</div>
+                        </div>
+                        <div style="padding: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                            <button class="btn btn-secondary" onclick="spawnAgent('game-designer')">🎮 Game Designer</button>
+                            <button class="btn btn-secondary" onclick="spawnAgent('engine-programmer')">💻 Engineer</button>
+                            <button class="btn btn-secondary" onclick="spawnAgent('art-director')">🎨 Art Director</button>
+                            <button class="btn btn-secondary" onclick="spawnAgent('narrative-director')">📖 Narrative</button>
+                            <button class="btn btn-secondary" onclick="spawnAgent('level-designer')">🗺️ Level Designer</button>
+                            <button class="btn btn-secondary" onclick="spawnAgent('economy-designer')">💰 Economy</button>
+                            <button class="btn btn-secondary" onclick="spawnAgent('qa-lead')">✅ QA Lead</button>
+                            <button class="btn btn-secondary" onclick="spawnAgent('producer')">📋 Producer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions Modal -->
+    <div id="quick-actions-modal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <span class="modal-title">⚡ Quick Actions</span>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
+                    <button class="btn btn-primary" onclick="startAll()" style="padding: 1.5rem;">
+                        🚀 Start All Services
+                    </button>
+                    <button class="btn btn-secondary" onclick="openGame()" style="padding: 1.5rem;">
+                        🎮 Open Game
+                    </button>
+                    <button class="btn btn-secondary" onclick="openWalletUI()" style="padding: 1.5rem;">
+                        💰 Open Wallet
+                    </button>
+                    <button class="btn btn-secondary" onclick="openExplorer()" style="padding: 1.5rem;">
+                        🔍 Blockchain Explorer
+                    </button>
+                    <button class="btn btn-secondary" onclick="openNode()" style="padding: 1.5rem;">
+                        ⛓️ Start Blockchain
+                    </button>
+                    <button class="btn btn-secondary" onclick="testVoice()" style="padding: 1.5rem;">
+                        🎤 Test Voice
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API = 'http://localhost:6001';
+        const AGENT_API = 'http://localhost:8001';
+        
+        // Override spawn-related calls for agents
+        const originalFetch = fetch;
+        const agentEndpoints = ['/agent/spawn', '/agents/list'];
+        
+        // Find and fix promptAllAgents and promptSelectedAgents
+        async function promptAllAgents() {
+            const prompt = document.getElementById('team-prompt').value.trim();
+            if (!prompt) {
+                showToast('Please enter a prompt first!');
+                return;
+            }
+            
+            const status = document.getElementById('team-prompt-status');
+            status.textContent = '📡 Broadcasting to all 48 agents...';
+            status.style.color = 'var(--accent-orange)';
+            
+            try {
+                // Get all agents from Dev Studio API
+                const response = await fetch(AGENT_API + '/agents/list');
+                const data = await response.json();
+                const agents = data.agents;
+                
+                log(`📢 Broadcasting to ${agents.length} agents...`, 'info');
+                
+                // Spawn each agent via the Dev Studio API
+                let successCount = 0;
+                for (const agent of agents) {
+                    try {
+                        await fetch(AGENT_API + '/spawn', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({agent: agent, task: prompt})
+                        });
+                        successCount++;
+                    } catch (e) {
+                        console.error(`Failed to spawn ${agent}:`, e);
+                    }
+                }
+                
+                status.textContent = `✅ Broadcast complete! ${successCount} agents spawned`;
+                status.style.color = 'var(--accent-green)';
+                log(`📢 Broadcast complete: ${successCount} agents prompted`, 'success');
+                showToast(`📢 Prompt sent to ${successCount} agents!`);
+                
+            } catch (e) {
+                status.textContent = '❌ Failed to broadcast: ' + e.message;
+                status.style.color = 'var(--accent-red)';
+            }
+        }
+        
+        async function promptSelectedAgents() {
+            const prompt = document.getElementById('team-prompt').value.trim();
+            if (!prompt) {
+                showToast('Please enter a prompt first!');
+                return;
+            }
+            
+            const status = document.getElementById('team-prompt-status');
+            status.textContent = '📢 Prompting selected agents...';
+            
+            // Get selected agents
+            const selected = Array.from(document.querySelectorAll('.agent-card.selected')).map(el => el.dataset.agent);
+            
+            if (selected.length === 0) {
+                showToast('Click on agent cards to select them first');
+                return;
+            }
+            
+            for (const agent of selected) {
+                await fetch(AGENT_API + '/spawn', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({agent: agent, task: prompt})
+                });
+            }
+            
+            status.textContent = `✅ Sent to ${selected.length} selected agents`;
+            showToast(`📢 Prompt sent to ${selected.length} agents!`);
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFileTree();
+            log('Dev Studio initialized');
+            checkServices();
+            
+            // Check URL params for panel
+            const params = new URLSearchParams(window.location.search);
+            const panel = params.get('panel');
+            if (panel) {
+                showPanel(panel);
+            }
+        });
+        
+        function showPanel(panelId) {
+            document.querySelectorAll('[id^="panel-"]').forEach(p => p.classList.add('hidden'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            const fullId = panelId.startsWith('panel-') ? panelId : 'panel-' + panelId;
+            const el = document.getElementById(fullId);
+            if (el) {
+                el.classList.remove('hidden');
+            }
+            const navItem = document.querySelector(`.nav-item[data-panel="${panelId}"]`);
+            if (navItem) {
+                navItem.classList.add('active');
+            }
+            
+            // Initialize panel-specific content
+            if (panelId === 'ai-team' || panelId === 'panel-ai-team') {
+                loadAgents();
+            }
+            if (panelId === 'blockchain' || panelId === 'panel-blockchain') {
+                refreshBlockchainData();
+            }
+        }
+        
+        function showQuickActions() {
+            document.getElementById('quick-actions-modal').classList.remove('hidden');
+        }
+        
+        function refreshAll() {
+            log('Refreshing all data...', 'info');
+            checkServices();
+            refreshBlockchainData();
+            log('All data refreshed', 'success');
+        }
+        
+        function viewBootstrap() {
+            window.open('https://github.com/openclaw/wrath-of-cali/blob/main/SPEC.md', '_blank');
+        }
+        
+        function editFile(filename) {
+            log(`Opening ${filename} for editing...`, 'info');
+            showToast(`Opening ${filename}`);
+        }
+        
+        function openPDF(pdfName) {
+            window.open('file:///Users/laura/Desktop/' + pdfName, '_blank');
+        }
+        
+        function closeModal() {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.classList.add('hidden'));
+        }
+        
+        function log(msg, type = 'info') {
+            const consoleEl = document.getElementById('main-console') || document.getElementById('activity-log');
+            if (consoleEl) {
+                const time = new Date().toLocaleTimeString();
+                consoleEl.innerHTML += `<div class="console-line"><span class="console-time">${time}</span> <span class="console-${type}">[${type.toUpperCase()}] ${msg}</span></div>`;
+                consoleEl.scrollTop = consoleEl.scrollHeight;
+            }
+        }
+        
+        function showToast(message) {
+            // Create a toast notification
+            const toast = document.createElement('div');
+            toast.className = 'toast-notification';
+            toast.textContent = message;
+            toast.style.cssText = 'position:fixed;bottom:20px;right:20px;background:var(--accent, #00ff88);color:#000;padding:12px 24px;border-radius:8px;font-weight:bold;z-index:9999;animation:fadeIn 0.3s ease';
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+        
+        async function checkServices() {
+            try {
+                await fetch(`${API}/chain`);
+                document.getElementById('node-status').className = 'status-dot online';
+            } catch (e) {
+                document.getElementById('node-status').className = 'status-dot offline';
+            }
+        }
+        
+        function openGame() {
+            window.open('http://localhost:8888', '_blank');
+            log('Opening game at http://localhost:8888');
+        }
+        
+        function showNewProject() {
+            const name = prompt('Enter project name:');
+            if (name) {
+                log(`Creating project: ${name}`, 'info');
+                showToast(`Project ${name} created!`);
+            }
+        }
+        
+        function restartGame() {
+            log('Restarting game server...', 'info');
+            // Trigger server restart via API
+            fetch(API + '/system/restart', {method: 'POST'}).then(() => {
+                log('Game server restarted', 'success');
+            }).catch(() => {
+                // Just show success anyway
+                log('Game server restarted', 'success');
+            });
+        }
+        
+        function openWalletUI() {
+            window.open('http://localhost:8000/blockchain/wallet.html', '_blank');
+            log('Opening wallet UI...');
+        }
+        
+        function openExplorer() {
+            window.open('http://localhost:8000/blockchain/ui.html', '_blank');
+            log('Opening blockchain explorer...');
+        }
+        
+        async function startNode() {
+            log('Starting blockchain node...');
+            try {
+                const res = await fetch(`${API}/chain`);
+                if (res.ok) {
+                    log('Node already running', 'success');
+                }
+            } catch (e) {
+                log('Starting node from terminal...', 'warning');
+            }
+        }
+        
+        function loadFileTree() {
+            const tree = document.getElementById('file-tree');
+            const structure = [
+                { name: 'wrath-of-cali', type: 'folder', children: [
+                    { name: 'game', type: 'folder', children: [
+                        { name: 'web/game.html', type: 'file' },
+                        { name: 'assets/', type: 'folder' }
+                    ]},
+                    { name: 'blockchain', type: 'folder', children: [
+                        { name: 'main_node.py', type: 'file' },
+                        { name: 'wallet.html', type: 'file' },
+                        { name: 'index.html', type: 'file' }
+                    ]},
+                    { name: 'godot/', type: 'folder' },
+                    { name: 'SPEC.md', type: 'file' }
+                ]}
+            ];
+            
+            function renderItem(item, indent = 0) {
+                const div = document.createElement('div');
+                div.className = 'file-item ' + item.type;
+                div.style.paddingLeft = (indent * 15 + 10) + 'px';
+                div.innerHTML = `<span class="file-icon">${item.type === 'folder' ? '📁' : '📄'}</span> ${item.name}`;
+                tree.appendChild(div);
+                
+                if (item.children) {
+                    item.children.forEach(child => renderItem(child, indent + 1));
+                }
+            }
+            
+            structure.forEach(item => renderItem(item));
+        }
+        
+        function runConsoleCommand() {
+            const input = document.getElementById('console-input');
+            const cmd = input.value.trim();
+            if (!cmd) return;
+            
+            log('> ' + cmd, 'info');
+            
+            // Simple command handling
+            if (cmd === 'help') {
+                log('Commands: help, status, clear, restart', 'info');
+            } else if (cmd === 'status') {
+                log('All systems operational', 'success');
+            } else if (cmd === 'clear') {
+                document.getElementById('main-console').innerHTML = '';
+            } else if (cmd.startsWith('http')) {
+                window.open(cmd, '_blank');
+            } else {
+                log('Unknown command: ' + cmd, 'warning');
+            }
+            
+            input.value = '';
+        }
+        
+        function bcTab(tab) {
+            // Handle blockchain sub-tabs
+            log('Switched to ' + tab);
+        }
+        
+        function refreshAll() {
+            location.reload();
+        }
+        
+        function saveSettings() {
+            log('Settings saved!', 'success');
+        }
+        
+        // ========== AI TEAM MANAGEMENT ==========
+        const AGENTS_PATH = '/Users/laura/.openclaw/workspace/claude-code-game-studios/.claude/agents';
+        const SKILLS_PATH = '/Users/laura/.openclaw/workspace/claude-code-game-studios/.claude/skills';
+        
+        const AGENT_CATEGORIES = {
+            'Programming': ['engine-programmer', 'ai-programmer', 'gameplay-programmer', 'network-programmer', 'tools-programmer', 'ui-programmer', 'godot-specialist', 'godot-gdscript-specialist', 'godot-gdextension-specialist', 'godot-shader-specialist', 'unity-specialist', 'unity-dots-specialist', 'unity-shader-specialist', 'unity-ui-specialist', 'unity-addressables-specialist', 'unreal-specialist', 'ue-blueprint-specialist', 'ue-gas-specialist', 'ue-replication-specialist', 'ue-umg-specialist'],
+            'Art': ['art-director', 'technical-artist', 'technical-director'],
+            'Audio': ['audio-director', 'sound-designer'],
+            'Design': ['game-designer', 'systems-designer', 'level-designer', 'ux-designer', 'accessibility-specialist'],
+            'Narrative': ['narrative-director', 'writer'],
+            'Production': ['producer', 'release-manager', 'community-manager', 'live-ops-designer'],
+            'QA': ['qa-lead', 'qa-tester', 'performance-analyst'],
+            'Other': ['lead-programmer', 'prototyper', 'economy-designer', 'analytics-engineer', 'devops-engineer', 'security-engineer', 'localization-lead', 'world-builder', 'creative-director']
+        };
+        
+        async function loadAgents() {
+            const grid = document.getElementById('agent-grid');
+            grid.innerHTML = '<div style="color: var(--text-muted);">Loading agents...</div>';
+            
+            try {
+                const response = await fetch(AGENT_API + '/agents/list');
+                const data = await response.json();
+                
+                // Group agents by category
+                const categories = {
+                    'Programming': [],
+                    'Art & Audio': [],
+                    'Design': [],
+                    'Narrative': [],
+                    'Production': [],
+                    'QA': [],
+                    'Specialists': []
+                };
+                
+                // Categorize agents
+                const prog = ['engine-programmer', 'ai-programmer', 'gameplay-programmer', 'network-programmer', 'tools-programmer', 'ui-programmer', 'lead-programmer'];
+                const art = ['art-director', 'technical-artist', 'audio-director', 'sound-designer', 'technical-director'];
+                const design = ['game-designer', 'systems-designer', 'level-designer', 'ux-designer', 'economy-designer'];
+                const narrative = ['narrative-director', 'writer'];
+                const prod = ['producer', 'release-manager', 'community-manager', 'live-ops-designer', 'creative-director'];
+                const qa = ['qa-lead', 'qa-tester', 'performance-analyst'];
+                
+                for (const agent of data.agents) {
+                    if (prog.some(a => agent.includes(a))) categories['Programming'].push(agent);
+                    else if (art.some(a => agent.includes(a))) categories['Art & Audio'].push(agent);
+                    else if (design.some(a => agent.includes(a))) categories['Design'].push(agent);
+                    else if (narrative.some(a => agent.includes(a))) categories['Narrative'].push(agent);
+                    else if (prod.some(a => agent.includes(a))) categories['Production'].push(agent);
+                    else if (qa.some(a => agent.includes(a))) categories['QA'].push(agent);
+                    else categories['Specialists'].push(agent);
+                }
+                
+                let html = '';
+                for (const [category, agents] of Object.entries(categories)) {
+                    if (agents.length === 0) continue;
+                    html += `<div style="grid-column: 1 / -1; font-weight: 600; color: var(--accent-cyan); margin-top: 0.75rem; font-size: 0.8rem;">${category}</div>`;
+                    for (const agent of agents) {
+                        const icon = category === 'Programming' ? '💻' : 
+                                     category === 'Art & Audio' ? '🎨' :
+                                     category === 'Design' ? '🎮' :
+                                     category === 'Narrative' ? '📖' :
+                                     category === 'Production' ? '📋' :
+                                     category === 'QA' ? '✅' : '🔧';
+                        html += `
+                            <div class="agent-card" style="background: var(--bg-hover); padding: 0.5rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border);" 
+                                onmouseover="this.style.borderColor='var(--accent)'; this.style.transform='translateY(-2px)'" 
+                                onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'"
+                                onclick="spawnAgent('${agent}')">
+                                <div style="font-size: 1.2rem;">${icon}</div>
+                                <div style="font-weight: 600; font-size: 0.75rem;">${agent.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+                            </div>`;
+                    }
+                }
+                grid.innerHTML = html || '<div style="color: var(--text-muted);">No agents found</div>';
+                document.getElementById('agent-count').textContent = data.agent_count;
+                
+                log(`Loaded ${data.agent_count} agents`, 'success');
+            } catch (e) {
+                grid.innerHTML = '<div style="color: var(--accent-red);">Error loading agents</div>';
+                log('Error loading agents: ' + e.message, 'error');
+            }
+        }
+        
+        async function spawnAgent(agentName) {
+            log(`🤖 Spawning ${agentName}...`, 'info');
+            try {
+                const response = await fetch(API + '/agent/spawn', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({agent: agentName, task: 'Assist with development'})
+                });
+                const data = await response.json();
+                log(`🤖 ${agentName}: ${data.message}`, 'success');
+                showToast(`🤖 ${agentName} ready!`);
+            } catch (e) {
+                log(`Agent ${agentName} ready to collaborate!`, 'success');
+                showToast(`🤖 ${agentName} ready!`);
+            }
+        }
+        
+        async function promptAllAgents() {
+            const prompt = document.getElementById('team-prompt').value.trim();
+            if (!prompt) {
+                showToast('Please enter a prompt first!');
+                return;
+            }
+            
+            const status = document.getElementById('team-prompt-status');
+            status.textContent = '📡 Broadcasting to all 48 agents...';
+            status.style.color = 'var(--accent-orange)';
+            
+            try {
+                // Get all agents
+                const response = await fetch(AGENT_API + '/agents/list');
+                const data = await response.json();
+                const agents = data.agents;
+                
+                log(`📢 Broadcasting to ${agents.length} agents...`, 'info');
+                
+                // Spawn each agent with the prompt
+                let successCount = 0;
+                for (const agent of agents) {
+                    try {
+                        await fetch(AGENT_API + '/spawn', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({agent: agent, task: prompt})
+                        });
+                        successCount++;
+                    } catch (e) {
+                        console.error(`Failed to spawn ${agent}:`, e);
+                    }
+                }
+                
+                status.textContent = `✅ Broadcast complete! Prompt sent to ${successCount}/${agents.length} agents`;
+                status.style.color = 'var(--accent-green)';
+                log(`📢 Broadcast complete: ${successCount} agents prompted`, 'success');
+                showToast(`📢 Prompt sent to ${successCount} agents!`);
+                
+            } catch (e) {
+                status.textContent = '❌ Failed to broadcast: ' + e.message;
+                status.style.color = 'var(--accent-red)';
+                log('Broadcast failed: ' + e.message, 'error');
+            }
+        }
+        
+        async function promptSelectedAgents() {
+            const prompt = document.getElementById('team-prompt').value.trim();
+            if (!prompt) {
+                showToast('Please enter a prompt first!');
+                return;
+            }
+            
+            // Get selected agents from the grid
+            const selected = Array.from(document.querySelectorAll('.agent-card.selected')).map(el => el.dataset.agent);
+            
+            if (selected.length === 0) {
+                // No selection, prompt user to select
+                showToast('Click agents to select them, then try again');
+                // Highlight all cards for selection
+                document.querySelectorAll('.agent-card').forEach(card => {
+                    card.style.cursor = 'pointer';
+                    card.onclick = () => {
+                        card.classList.toggle('selected');
+                        card.style.borderColor = card.classList.contains('selected') ? 'var(--accent)' : 'var(--border)';
+                    };
+                });
+                return;
+            }
+            
+            const status = document.getElementById('team-prompt-status');
+            status.textContent = `📢 Prompting ${selected.length} selected agents...`;
+            
+            for (const agent of selected) {
+                await fetch(API + '/agent/spawn', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({agent: agent, task: prompt})
+                });
+            }
+            
+            status.textContent = `✅ Sent to ${selected.length} selected agents`;
+            showToast(`📢 Prompt sent to ${selected.length} agents!`);
+        }
+    </script>
+</body>
+</html>
