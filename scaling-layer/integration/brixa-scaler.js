@@ -222,6 +222,7 @@ class BrixaScaler {
     
     // Auto-detect and use public RPC
     console.log(`🚀 Starting BrixaScaler for ${this.chain}...`);
+    console.log(`⚠️  DEMO MODE - Transactions will be queued but not sent to chain\n`);
     
     if (this.chain === 'bitcoin') {
       this.handler = new BitcoinHandler();

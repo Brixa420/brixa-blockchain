@@ -107,6 +107,12 @@ async function main() {
   </div>
   
   <p><small>No API key needed! Using free public RPCs.</small></p>
+  
+  <div style="background: #ff9800; color: #000; padding: 15px; border-radius: 10px; margin-top: 20px; text-align: center;">
+    <strong>⚠️ DEMO MODE</strong><br>
+    Transactions are queued but NOT sent to chain.<br>
+    To send real transactions, add your private key.
+  </div>
 </body>
 </html>
       `);
@@ -163,6 +169,7 @@ async function main() {
     console.log('✅ Server running!');
     console.log(`   Point wallet to: http://localhost:${config.port}\n`);
     console.log('💜 BrixaScaler - VPN for TPS\n');
+    console.log('⚠️  DEMO MODE - Transactions are queued but NOT sent to chain\n');
   });
 
   // Stats
