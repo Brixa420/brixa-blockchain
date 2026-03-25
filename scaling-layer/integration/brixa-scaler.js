@@ -1,145 +1,195 @@
-// Wrath of Cali - Simple JS Drop-In (no build step!)
-// Just include this script and go!
+/**
+ * BrixaScaler - VPN for TPS
+ * Real implementation that connects to actual blockchains
+ */
 
-(function() {
-  // ========== THE DROP-IN CLASS ==========
-  class BrixaScaler {
-    constructor(blockchainUrl, options = {}) {
-      this.url = blockchainUrl;
-      this.shards = options.shards || 100;
-      this.queue = {};
-      this.stats = { processed: 0, failed: 0 };
-      
-      // Initialize shard queues
-      for (let i = 0; i < this.shards; i++) {
-        this.queue[i] = [];
-      }
-      
-      console.log(`🚀 Wrath of Cali Scaling Layer initialized: ${this.shards} shards`);
-    }
+const { EthereumHandler, BitcoinHandler, SolanaHandler } = require('./real-handlers');
+
+class BrixaScaler {
+  /**
+   * @param {string} chain - 'ethereum', 'bitcoin', 'solana', 'polygon', etc.
+   * @param {object} options - { shards: 100, batchSize: 10000, batchInterval: 100 }
+   */
+  constructor(chain, options = {}) {
+    this.chain = chain.toLowerCase();
+    this.options = {
+      shards: options.shards || 100,
+      batchSize: options.batchSize || 10000,
+      batchInterval: options.batchInterval || 100,
+      router: options.router || 'hash'
+    };
     
-    // ====== THE 3-LINE SETUP ======
-    // new BrixaScaler('https://eth-mainnet...', { shards: 100 })
-    // .then(scaler => scaler.start())
-    // ================================
-    
-    async start() {
-      // Process batches every 100ms
-      this.interval = setInterval(() => this.processBatch(), 100);
-      console.log('⚡ Scaling layer ACTIVE - transactions now sharded');
-    }
-    
-    stop() {
-      clearInterval(this.interval);
-    }
-    
-    // Main API: submit transaction through sharding layer
-    async submit(tx) {
-      // Route to shard based on recipient address
-      const shard = this.getShardForAddress(tx.to);
-      
-      // Add to queue
-      this.queue[shard].push({
-        ...tx,
-        _shard: shard,
-        _timestamp: Date.now()
-      });
-      
-      // Immediate return (async processing)
-      return `queued_shard_${shard}`;
-    }
-    
-    // Batch submit for high throughput
-    async submitBatch(transactions) {
-      const results = [];
-      for (const tx of transactions) {
-        results.push(await this.submit(tx));
-      }
-      return results;
-    }
-    
-    // Hash-based shard routing (deterministic)
-    getShardForAddress(address) {
-      let hash = 0;
-      for (let i = 0; i < address.length; i++) {
-        hash = ((hash << 5) - hash) + address.charCodeAt(i);
-        hash = hash & hash;
-      }
-      return Math.abs(hash) % this.shards;
-    }
-    
-    // Process queued transactions
-    async processBatch() {
-      for (let shardId = 0; shardId < this.shards; shardId++) {
-        const batch = this.queue[shardId].splice(0, 1000);
-        
-        if (batch.length > 0) {
-          try {
-            // Submit batch to blockchain
-            // Replace with your chain's RPC call
-            await this.submitToChain(batch);
-            this.stats.processed += batch.length;
-          } catch (e) {
-            this.stats.failed += batch.length;
-            // Re-queue failed
-            this.queue[shardId].unshift(...batch);
-          }
-        }
-      }
-    }
-    
-    // Override this to connect to your blockchain
-    async submitToChain(batch) {
-      console.log(`📦 Batch of ${batch.length} ready (simulated - implement submitToChain)`);
-    }
-    
-    // Get current stats
-    getStats() {
-      const queued = Object.values(this.queue).reduce((a, b) => a + b.length, 0);
-      return {
-        shards: this.shards,
-        queued,
-        processed: this.stats.processed,
-        failed: this.stats.failed
-      };
+    this.handler = null;
+    this.queue = [];
+    this.shards = new Array(this.options.shards).fill(null).map(() => []);
+    this.running = false;
+    this.processor = null;
+    this.stats = {
+      queued: 0,
+      processed: 0,
+      failed: 0,
+      shards: this.options.shards
+    };
+  }
+
+  /**
+   * Set the chain handler
+   * @param {EthereumHandler|BitcoinHandler|SolanaHandler} handler
+   */
+  setHandler(handler) {
+    this.handler = handler;
+  }
+
+  /**
+   * Set handler by chain name (auto-detect)
+   */
+  setChain(rpcUrl, privateKey = null) {
+    switch (this.chain) {
+      case 'ethereum':
+      case 'polygon':
+      case 'bsc':
+      case 'avalanche':
+      case 'arbitrum':
+      case 'optimism':
+      case 'base':
+      case 'fantom':
+        this.handler = new EthereumHandler(rpcUrl, privateKey);
+        break;
+      case 'bitcoin':
+      case 'btc':
+      case 'litecoin':
+      case 'dogecoin':
+        this.handler = new BitcoinHandler({ rpcUrl, rpcUser: privateKey?.rpcUser, rpcPass: privateKey?.rpcPass });
+        break;
+      case 'solana':
+        this.handler = new SolanaHandler(rpcUrl);
+        break;
+      default:
+        throw new Error(`Unknown chain: ${this.chain}`);
     }
   }
-  
-  // Export for use
+
+  /**
+   * Start the scaler - begins processing transactions
+   */
+  async start() {
+    if (this.running) return;
+    
+    if (!this.handler) {
+      throw new Error('No handler set. Use setHandler() or setChain()');
+    }
+    
+    this.running = true;
+    
+    // Start batch processor
+    this.processor = setInterval(async () => {
+      await this.processBatch();
+    }, this.options.batchInterval);
+    
+    console.log(`✅ BrixaScaler started on ${this.chain} with ${this.options.shards} shards`);
+  }
+
+  /**
+   * Stop the scaler
+   */
+  stop() {
+    this.running = false;
+    if (this.processor) {
+      clearInterval(this.processor);
+      this.processor = null;
+    }
+  }
+
+  /**
+   * Submit a transaction to the queue
+   * @param {object} tx - { to, value, data, from, etc. }
+   * @returns {string} Transaction ID
+   */
+  submit(tx) {
+    const txId = `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
+    const txWithId = { ...tx, id: txId, chain: this.chain, timestamp: Date.now() };
+    
+    // Route to shard
+    const shardIndex = this.getShardIndex(tx.to || tx.from || '');
+    this.shards[shardIndex].push(txWithId);
+    
+    this.stats.queued = this.queue.length;
+    
+    return txId;
+  }
+
+  /**
+   * Get shard index for an address
+   */
+  getShardIndex(address) {
+    if (!this.handler) {
+      return Math.floor(Math.random() * this.options.shards);
+    }
+    return this.handler.getShardForAddress(address, this.options.shards);
+  }
+
+  /**
+   * Process all shards - send batches to chain
+   */
+  async processBatch() {
+    for (let i = 0; i < this.shards.length; i++) {
+      const shard = this.shards[i];
+      if (shard.length === 0) continue;
+      
+      // Get up to batchSize transactions
+      const batch = shard.splice(0, this.options.batchSize);
+      
+      try {
+        const results = await this.handler.submitBatch(batch);
+        
+        // Update stats
+        this.stats.processed += batch.length;
+        this.stats.queued = this.getTotalQueued();
+        
+        // Log results
+        const successful = results.filter(r => r !== null).length;
+        console.log(`📦 Shard ${i}: Sent ${batch.length} txs, ${successful} successful`);
+        
+      } catch (error) {
+        console.error(`❌ Shard ${i} failed: ${error.message}`);
+        this.stats.failed += batch.length;
+        
+        // Re-queue failed transactions
+        shard.unshift(...batch);
+      }
+    }
+  }
+
+  /**
+   * Get total queued transactions
+   */
+  getTotalQueued() {
+    return this.shards.reduce((sum, shard) => sum + shard.length, 0);
+  }
+
+  /**
+   * Get current stats
+   */
+  getStats() {
+    return {
+      chain: this.chain,
+      shards: this.stats.shards,
+      queued: this.getTotalQueued(),
+      processed: this.stats.processed,
+      failed: this.stats.failed,
+      running: this.running
+    };
+  }
+}
+
+// Export for Node.js
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { BrixaScaler, EthereumHandler, BitcoinHandler, SolanaHandler };
+}
+
+// Export for browser
+if (typeof window !== 'undefined') {
   window.BrixaScaler = BrixaScaler;
-  
-  // ========== QUICK START EXAMPLES ==========
-  /*
-  // Example 1: Ethereum
-  const ethScaler = new BrixaScaler('https://eth-mainnet.alchemyapi.io/...', {
-    shards: 100
-  });
-  
-  ethScaler.submitToChain = async function(batch) {
-    // Send to Ethereum via ethers.js or web3
-    const tx = await contract.submitBatch(batch, { gasLimit: batch.length * 21000 });
-    await tx.wait();
-  };
-  
-  await ethScaler.start();
-  
-  // Submit transactions:
-  await ethScaler.submit({ to: '0xABC...', value: '1.0' });
-  
-  
-  // Example 2: Solana
-  const solScaler = new BrixaScaler('https://api.mainnet-beta.solana.com', {
-    shards: 50
-  });
-  
-  solScaler.submitToChain = async function(batch) {
-    // Send to Solana
-    const transaction = new Transaction();
-    // ... add batch instructions
-    await connection.sendTransaction(transaction);
-  };
-  */
-  
-  console.log('💜 BrixaScaler loaded! Create with: new BrixaScaler(blockchainUrl, options)');
-  
-})();
+  window.BrixaScaler.handlers = { EthereumHandler, BitcoinHandler, SolanaHandler };
+}

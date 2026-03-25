@@ -1,30 +1,27 @@
 {
   "name": "@brixa420/scaling-layer",
   "version": "1.0.0",
-  "description": "Drop-in infinite TPS scaling layer for any blockchain",
-  "main": "dist/brixa-scaler.min.js",
-  "types": "dist/index.d.ts",
+  "description": "Brixa - VPN for TPS. Add infinite TPS to any blockchain.",
+  "main": "integration/brixa-scaler.js",
+  "types": "package/index.d.ts",
   "scripts": {
-    "build": "terser brixa-scaler.js -o dist/brixa-scaler.min.js --compress --mangle",
-    "test": "node test.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Brixa420/brixa-blockchain"
+    "test": "node integration/test-scaler.js",
+    "start": "node integration/server.js"
   },
   "keywords": [
-    "blockchain",
     "scaling",
     "tps",
     "ethereum",
     "bitcoin",
-    "sharding",
-    "infinite"
+    "blockchain",
+    "layer2",
+    "brixa"
   ],
   "author": "Laura Wolf (Brixa420)",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Brixa420/brixa-blockchain/issues"
-  },
-  "homepage": "https://github.com/Brixa420/brixa-blockchain#readme"
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
 }
