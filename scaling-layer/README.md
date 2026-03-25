@@ -2,7 +2,7 @@
 
 ⚠️ **Warning: This is experimental and untested code. Do not use for production. Use at your own risk.**
 
-**Brixa is NOT a blockchain. It's a VPN for TPS - you run it on your end, and your blockchain suddenly has infinite transactions per second.**
+**Brixa is NOT a blockchain. It's NOT Layer 2. It's just RPC middleware - you run it, your wallet connects to it, transactions go through faster.**
 
 ---
 
@@ -16,29 +16,31 @@ Normal:     Wallet → Chain (limited by chain TPS)
 With Brixa: Wallet → Brixa → Chain (unlimited!)
 ```
 
-**The chain doesn't know Brixa exists.**
+**The chain doesn't know Brixa exists. No L2. No sidechain. Just middleware.**
 
 ## How It Works
 
 ```
 ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
 │   WALLET    │────▶│    BRIXA     │────▶│   CHAIN      │
-│  (You)      │     │ (VPN for TPS)│     │ (Ethereum,   │
-│              │     │              │     │  Bitcoin,    │
-│              │     │ Batches &    │     │  Solana...)  │
-│              │     │ shards txs   │     │              │
+│              │     │  (RPC Proxy) │     │              │
+│              │     │              │     │  Just normal │
+│              │     │  Middleware  │     │  transactions │
+│              │     │  - not a     │     │  arriving    │
+│              │     │    chain     │     │              │
 └──────────────┘     └──────────────┘     └──────────────┘
-                           │
-                    ┌──────┴──────┐
-                    │ No chain   │
-                    │ needs to   │
-                    │ know...    │
-                    └────────────┘
+
+Your wallet      Just software       Your chain
+connects to      you run on          sees normal
+Brixa instead    your PC             transactions
+of the chain
 ```
 
-Your wallet doesn't connect directly to the chain anymore. It connects to Brixa.
-
-**Chain has no idea you're using Brixa.**
+**Brixa is just RPC middleware:**
+- Not a blockchain
+- Not Layer 2
+- Not a sidechain
+- Just software that batches your transactions
 
 ### Step 1: Save brixa.html
 
