@@ -30,21 +30,30 @@ Shards=10, Workers=10 → Mean=  14.2M TPS (σ=3.2M, Range: 11.9M - 20.6M)
 
 ### ZK Layer (Real, Not Stubbed)
 ```
-Proof generation: ~565ms per proof
+Proof generation: ~565ms per proof (4-tx batch)
 Verification:     ~188ms per proof
 Throughput:       ~7,000 TPS (with period=1000)
+
+PLONK (8-tx recursive): ~1,290ms per proof
 ```
 
 **This is real Circom circuit + snarkjs, not simulated.**
+
+### Recursive Batching: DISPROVEN
+```
+Recursive 8-tx proof:    1,290ms (one big proof)
+Two separate 4-tx proofs: 1,130ms (faster!)
+Conclusion: Recursive is 14% SLOWER than separate proofs
+```
 
 ## Configuration
 
 ```javascript
 {
     batchSize: 4,           // txs per batch
-    zkPeriod: 1000,        // batches per ZK proof
-    proveTime: 565,        // ms per ZK proof (real)
-    verifyTime: 188        // ms per verify (real)
+    zkPeriod: 1000,         // batches per ZK proof
+    proveTime: 565,         // ms per ZK proof (real)
+    verifyTime: 188         // ms per verify (real)
 }
 ```
 
@@ -61,9 +70,8 @@ Throughput:       ~7,000 TPS (with period=1000)
 | Single thread batching | 5-6M | ✅ Real |
 | 10-thread batching | 11.9M-20.6M | ✅ Real (high variance) |
 | Hash-only verify | 5-17M | ✅ Real |
-| Periodic ZK (simulated) | 14K | ❌ Fake |
 | **Periodic ZK (real)** | **~7K** | ✅ Real |
-| Continuous ZK | ~14 | ✅ Real (too slow) |
+| Recursive batching | ~6K | ❌ DISPROVEN (slower) |
 | Settlement | ~65 | ⚠️ External |
 
 ## Bottleneck Analysis
@@ -80,3 +88,5 @@ To improve beyond 65 TPS:
 - `periodic_zk.go` - Go implementation with HTTP endpoints
 - `bench/stats_bench.go` - Batching benchmark code
 - `bench/circuits/` - Circom circuits + snarkjs
+  - `batch_merkle.circom` - Working 4-tx circuit
+  - `recursive_2batch.circom` - Recursive (slower, not used)
