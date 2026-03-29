@@ -660,6 +660,13 @@ func main() {
 	http.HandleFunc("/zk/transfer", shieldedTransferHandler)
 	http.HandleFunc("/zk/pool", shieldedPoolHandler)
 	
+	// Periodic ZK Routes (Hybrid Batching)
+	InitZK() // Initialize periodic ZK
+	http.HandleFunc("/zk/batch", addBatchHandler)
+	http.HandleFunc("/zk/proof", zkProofHandler)
+	http.HandleFunc("/zk/verify", verifyZKHandler)
+	http.HandleFunc("/zk/period", setZKPeriodHandler)
+	
 	// Start block producer
 	go blockProducer()
 	
